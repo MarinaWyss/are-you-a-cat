@@ -10,7 +10,7 @@ Dev plan:
 
 - [X] Find data
 - [ ] Data prep
-- [ ] Baseline model training locally (logistic regression)
+- [ ] Baseline model training locally
 - [ ] Hyperparam tuning locally
 - [ ] Model registry
 - [ ] Performance evaluation and deployment
@@ -21,5 +21,5 @@ Dev plan:
 Stretch goals:
 
 - [ ] SHAP, to illustrate what properties of the image contributed to the prediction
-- [ ] Model iteration, likely a CNN trained on the cloud
+- [ ] Model iteration / training with Sagemaker
 - [ ] Monitoring
