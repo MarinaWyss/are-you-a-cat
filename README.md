@@ -7,17 +7,17 @@ I intend to build an image classifier to predict if you are a cat or not, based 
 Dev plan:
 
 - [X] Find data
-- [] Data prep
-- [] Baseline model training locally (logistic regression)
-- [] Hyperparam tuning locally
-- [] Model registry
-- [] Performance evaluation and deployment
-- [] Tests
-- [] Streamlit app
-- [] Presentation
+- [ ] Data prep
+- [ ] Baseline model training locally (logistic regression)
+- [ ] Hyperparam tuning locally
+- [ ] Model registry
+- [ ] Performance evaluation and deployment
+- [ ] Tests
+- [ ] Streamlit app
+- [ ] Presentation
 
 Stretch goals:
 
-- [] SHAP, to illustrate what properties of the image contributed to the prediction
-- [] Model iteration, likely a CNN trained on the cloud
-- [] Monitoring
+- [ ] SHAP, to illustrate what properties of the image contributed to the prediction
+- [ ] Model iteration, likely a CNN trained on the cloud
+- [ ] Monitoring
