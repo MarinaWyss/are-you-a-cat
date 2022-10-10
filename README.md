@@ -1,5 +1,7 @@
 # ZenML Month of MLOps Competition
 
+![example workflow](https://github.com/MarinaWyss/zenml-mlop-competition/actions/workflows/run-tests.yaml/badge.svg)
+
 This repo contains code for the [ZenML Month of MLOps Competition](https://blog.zenml.io/mlops-competition/).
 
 I intend to build an image classifier to predict if you are a cat or not, based on a selfie uploaded to a Streamlit app.
