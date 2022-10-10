@@ -1,6 +1,6 @@
 # ZenML Month of MLOps Competition
 
-![example workflow](https://github.com/MarinaWyss/zenml-mlop-competition/actions/workflows/run-tests.yaml/badge.svg)
+![Test status](https://github.com/MarinaWyss/zenml-mlops-competition/workflows/run-tests/badge.svg)
 
 This repo contains code for the [ZenML Month of MLOps Competition](https://blog.zenml.io/mlops-competition/).
 
