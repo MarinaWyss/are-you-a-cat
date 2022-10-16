@@ -32,6 +32,7 @@ class CatClassifier:
         https://github.com/rpeden/cat-or-not/blob/master/train.py
         """
         logging.info("Constructing model.")
+
         cnn2d = Sequential()
         cnn2d.add(
             Conv2D(

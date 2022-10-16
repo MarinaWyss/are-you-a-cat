@@ -81,11 +81,8 @@ def format_data_for_model(dat_list: List) -> (np.array, np.array, np.array):
     """
     images = np.array(
         [i[0] for i in dat_list]).reshape(
-            -1,
-            configs['training']['image_size'],
-            configs['training']['image_size'],
-            1
-        )
+            -1, configs['training']['image_size'],
+            configs['training']['image_size'], 1)
     labels = np.array([i[1] for i in dat_list])
     image_paths = np.array([i[2] for i in dat_list])
     return images, labels, image_paths
