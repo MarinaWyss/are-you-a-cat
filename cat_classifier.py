@@ -10,7 +10,7 @@ from tensorflow.keras.layers import (
     BatchNormalization
 )
 
-from tensorflow.keras.models import save_model
+import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import AUC, Precision, Recall
 
@@ -87,7 +87,7 @@ class CatClassifier:
 
         # TODO from_logits
         cnn2d.compile(loss='binary_crossentropy',
-                      optimizer=Adam(lr=self.args['learning_rate']),
+                      optimizer=Adam(learning_rate=self.args['learning_rate']),
                       metrics=[AUC(), Precision(), Recall()])
 
         logging.info("Model compiled.")
@@ -131,7 +131,7 @@ class CatClassifier:
         if not self.model:
             raise Exception('Error: Initialize model before saving.')
 
-        save_model(
+        tf.keras.models.save_model(
             self.model,
             filepath=self.args['output_path'],
             save_format='h5'

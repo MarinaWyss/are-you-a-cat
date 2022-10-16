@@ -6,8 +6,8 @@ import unittest.mock as mock
 import train_cat_classifier as tcc
 
 
-class TestDNNSkillTagging(unittest.TestCase):
-    """Test DNN skill tagging."""
+class TestTrainCatClassifier(unittest.TestCase):
+    """Test train CatClassifier."""
     @classmethod
     def setUpClass(cls):
         with open('tests/config_test.yaml', 'r') as file:
