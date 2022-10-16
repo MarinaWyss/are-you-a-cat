@@ -10,7 +10,7 @@ class TestDNNSkillTagging(unittest.TestCase):
     """Test DNN skill tagging."""
     @classmethod
     def setUpClass(cls):
-        with open('config_test.yaml', 'r') as file:
+        with open('tests/config_test.yaml', 'r') as file:
             configs = yaml.safe_load(file)
 
         cls.args = configs['training']
