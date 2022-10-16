@@ -9,8 +9,8 @@ I intend to build an image classifier to predict if you are a cat or not, based 
 Dev plan:
 
 - [X] Find data
-- [ ] Data prep
-- [ ] Baseline model training locally
+- [X] Data prep
+- [X] Baseline model training locally
 - [ ] Hyperparam tuning locally
 - [ ] Model registry
 - [ ] Performance evaluation and deployment
