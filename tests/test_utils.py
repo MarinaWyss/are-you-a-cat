@@ -17,12 +17,12 @@ class TestUtils(unittest.TestCase):
     def test_label_img_cat(self):
         res = utils.label_img('cats')
         self.assertIsInstance(res, np.ndarray)
-        self.assertEqual(res, np.array([1, 0]))
+        np.testing.assert_array_equal(res, np.array([1, 0]))
 
     def test_label_img_not_cat(self):
         res = utils.label_img('dogs')
         self.assertIsInstance(res, np.ndarray)
-        self.assertEqual(res, np.array([0, 1]))
+        np.testing.assert_array_equal(res, np.array([0, 1]))
 
     def test_load_data(self):
         res = utils.load_data(train=True, configs=self.configs)
@@ -35,7 +35,7 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(len(res[0][0]), self.configs['image_size'])
         self.assertIsInstance(res[0][0], np.ndarray)
         # Check that the labels are correct
-        self.assertEqual(res[0][1], np.array([1, 0]))
+        np.testing.assert_array_equal(res[0][1], np.array([1, 0]))
         # Check that the path is correct
         self.assertIsInstance(res[0][2], str)
 
@@ -53,8 +53,8 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(len(images), 20)
         self.assertEqual(len(labels), 20)
         self.assertEqual(len(paths), 20)
-        self.assertEqual(labels[0], np.array([1, 0]))
-        self.assertEqual(labels[10], np.array([0, 1]))
+        np.testing.assert_array_equal(labels[0], np.array([1, 0]))
+        np.testing.assert_array_equal(labels[10], np.array([0, 1]))
 
 
 if __name__ == '__main__':

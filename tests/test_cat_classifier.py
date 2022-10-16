@@ -13,7 +13,7 @@ class TestCatClassifier(unittest.TestCase):
         with open('tests/config_test.yaml', 'r') as file:
             configs = yaml.safe_load(file)
 
-        cls.args = configs['training']
+        cls.args = configs
 
     def test_initialize_class(self):
         # Initialize class
