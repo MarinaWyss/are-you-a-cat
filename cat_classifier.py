@@ -36,59 +36,59 @@ class CatClassifier:
         cnn2d = Sequential()
         cnn2d.add(
             Conv2D(
-                units=self.args.conv_1_units,
-                kernel_size=(self.args.kernel_size, self.args.kernel_size),
+                units=self.args['conv_1_units'],
+                kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
                 activation='relu',
-                input_shape=(self.args.image_size, self.args.image_size, 1)))
+                input_shape=(self.args['image_size'], self.args['image_size'], 1)))
         cnn2d.add(MaxPooling2D(
-            pool_size=(self.args.max_pool, self.args.max_pool)))
+            pool_size=(self.args['max_pool'], self.args['max_pool'])))
         cnn2d.add(BatchNormalization())
         cnn2d.add(Conv2D(
-            units=self.args.conv_2_units,
-            kernel_size=(self.args.kernel_size, self.args.kernel_size),
+            units=self.args['conv_2_units'],
+            kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
             activation='relu'))
         cnn2d.add(MaxPooling2D(
-            pool_size=(self.args.max_pool, self.args.max_pool)))
+            pool_size=(self.args['max_pool'], self.args['max_pool'])))
         cnn2d.add(BatchNormalization())
         cnn2d.add(Conv2D(
-            units=self.args.conv_3_units,
-            kernel_size=(self.args.kernel_size, self.args.kernel_size),
+            units=self.args['conv_3_units'],
+            kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
             activation='relu'))
         cnn2d.add(MaxPooling2D(
-            pool_size=(self.args.max_pool, self.args.max_pool)))
+            pool_size=(self.args['max_pool'], self.args['max_pool'])))
         cnn2d.add(BatchNormalization())
         cnn2d.add(Conv2D(
-            units=self.args.conv_4_units,
-            kernel_size=(self.args.kernel_size, self.args.kernel_size),
+            units=self.args['conv_4_units'],
+            kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
             activation='relu'))
         cnn2d.add(MaxPooling2D(
-            pool_size=(self.args.max_pool, self.args.max_pool)))
+            pool_size=(self.args['max_pool'], self.args['max_pool'])))
         cnn2d.add(BatchNormalization())
         cnn2d.add(Conv2D(
-            units=self.args.conv_5_units,
-            kernel_size=(self.args.kernel_size, self.args.kernel_size),
+            units=self.args['conv_5_units'],
+            kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
             activation='relu'))
         cnn2d.add(MaxPooling2D(
-            pool_size=(self.args.max_pool, self.args.max_pool)))
+            pool_size=(self.args['max_pool'], self.args['max_pool'])))
         cnn2d.add(BatchNormalization())
         cnn2d.add(Dropout(
-            self.args.dropout))
+            self.args['dropout']))
         cnn2d.add(Flatten())
         cnn2d.add(Dense(
-            units=self.args.dense_1_units,
+            units=self.args['dense_1_units'],
             activation='relu'))
         cnn2d.add(Dropout(
-            self.args.dropout))
+            self.args['dropout']))
         cnn2d.add(Dense(
-            units=self.args.dense_2_units,
+            units=self.args['dense_2_units'],
             activation='relu'))
         cnn2d.add(Dense(
-            units=self.args.dense_3_units,
+            units=self.args['dense_3_units'],
             activation='sigmoid'))
 
         # TODO from_logits
         cnn2d.compile(loss='binary_crossentropy',
-                      optimizer=Adam(lr=self.args.learning_rate),
+                      optimizer=Adam(lr=self.args['learning_rate']),
                       metrics=[AUC(), Precision(), Recall()])
 
         logging.info("Model compiled.")
@@ -114,10 +114,10 @@ class CatClassifier:
         logging.info("Fitting model.")
         self.model.fit(x=X_train,
                        y=y_train,
-                       epochs=self.args.num_epochs,
-                       batch_size=self.args.batch_size,
-                       validation_split=self.args.val_split,
-                       seed=self.args.random_seed,
+                       epochs=self.args['num_epochs'],
+                       batch_size=self.args['batch_size'],
+                       validation_split=self.args['val_split'],
+                       seed=self.args['random_seed'],
                        shuffle=True,
                        )
 
@@ -132,5 +132,5 @@ class CatClassifier:
         if not self.model:
             raise Exception('Error: Initialize model before saving.')
 
-        self.model.save(self.args.output_path)
+        self.model.save(self.args['output_path'])
         logging.info("Model saved.")

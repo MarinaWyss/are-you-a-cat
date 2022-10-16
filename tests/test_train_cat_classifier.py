@@ -3,7 +3,7 @@ import yaml
 import unittest
 import unittest.mock as mock
 
-from cat_classifier import CatClassifier
+import train_cat_classifier as tcc
 
 
 class TestDNNSkillTagging(unittest.TestCase):
@@ -23,7 +23,7 @@ class TestDNNSkillTagging(unittest.TestCase):
                   cat_classifier_fit,
                   cat_classifier_save):
 
-        CatClassifier.main(self.args)
+        tcc.main(self.args)
 
         # Assert model fitted and saved
         cat_classifier_construct.assert_called_once()

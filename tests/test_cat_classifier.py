@@ -20,9 +20,9 @@ class TestCatClassifier(unittest.TestCase):
         cnn2d = CatClassifier(self.args)
 
         # Assert args are correct
-        self.assertEqual(cnn2d.args.kernel_size, 3)
-        self.assertEqual(cnn2d.args.val_split, 0.2)
-        self.assertEqual(cnn2d.args.output_path, 'model_test.h5')
+        self.assertEqual(cnn2d.args['kernel_size'], 3)
+        self.assertEqual(cnn2d.args['val_split'], 0.2)
+        self.assertEqual(cnn2d.args['output_path'], 'model_test.h5')
 
         # Assert model is None
         self.assertIsNone(cnn2d.model)
@@ -63,7 +63,7 @@ class TestCatClassifier(unittest.TestCase):
         cnn2d.save()
 
         save_model.assert_called_once_with(cnn2d.model,
-                                           cnn2d.args.output_path,
+                                           cnn2d.args['output_path'],
                                            save_format='h5')
 
 
