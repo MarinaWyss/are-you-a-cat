@@ -1,6 +1,4 @@
-import os
 import logging
-from random import shuffle
 
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import (
@@ -12,6 +10,7 @@ from tensorflow.keras.layers import (
     BatchNormalization
 )
 
+from tensorflow.keras.models import save_model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import AUC, Precision, Recall
 
@@ -132,5 +131,9 @@ class CatClassifier:
         if not self.model:
             raise Exception('Error: Initialize model before saving.')
 
-        self.model.save(self.args['output_path'])
+        save_model(
+            self.model,
+            filepath=self.args['output_path'],
+            save_format='h5'
+        )
         logging.info("Model saved.")

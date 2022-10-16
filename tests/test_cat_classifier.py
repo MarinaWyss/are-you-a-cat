@@ -36,7 +36,7 @@ class TestCatClassifier(unittest.TestCase):
         # Assert model is constructed correctly
         self.assertIsNotNone(model)
         self.assertEqual(21, len(model.layers))
-        self.assertEqual(2, len(model.outputs))
+        self.assertEqual(1, len(model.outputs))
 
     def test_fit(self):
         cnn2d = CatClassifier(self.args)
@@ -63,7 +63,7 @@ class TestCatClassifier(unittest.TestCase):
         cnn2d.save()
 
         save_model.assert_called_once_with(cnn2d.model,
-                                           cnn2d.args['output_path'],
+                                           filepath=cnn2d.args['output_path'],
                                            save_format='h5')
 
 
