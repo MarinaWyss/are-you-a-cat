@@ -36,7 +36,7 @@ class CatClassifier:
         cnn2d = Sequential()
         cnn2d.add(
             Conv2D(
-                units=self.args['conv_1_units'],
+                filters=self.args['conv_1_filters'],
                 kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
                 activation='relu',
                 input_shape=(self.args['image_size'], self.args['image_size'], 1)))
@@ -44,28 +44,28 @@ class CatClassifier:
             pool_size=(self.args['max_pool'], self.args['max_pool'])))
         cnn2d.add(BatchNormalization())
         cnn2d.add(Conv2D(
-            units=self.args['conv_2_units'],
+            filters=self.args['conv_2_filters'],
             kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
             activation='relu'))
         cnn2d.add(MaxPooling2D(
             pool_size=(self.args['max_pool'], self.args['max_pool'])))
         cnn2d.add(BatchNormalization())
         cnn2d.add(Conv2D(
-            units=self.args['conv_3_units'],
+            filters=self.args['conv_3_filters'],
             kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
             activation='relu'))
         cnn2d.add(MaxPooling2D(
             pool_size=(self.args['max_pool'], self.args['max_pool'])))
         cnn2d.add(BatchNormalization())
         cnn2d.add(Conv2D(
-            units=self.args['conv_4_units'],
+            filters=self.args['conv_4_filters'],
             kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
             activation='relu'))
         cnn2d.add(MaxPooling2D(
             pool_size=(self.args['max_pool'], self.args['max_pool'])))
         cnn2d.add(BatchNormalization())
         cnn2d.add(Conv2D(
-            units=self.args['conv_5_units'],
+            filters=self.args['conv_5_filters'],
             kernel_size=(self.args['kernel_size'], self.args['kernel_size']),
             activation='relu'))
         cnn2d.add(MaxPooling2D(
