@@ -3,22 +3,21 @@ image_dir_test: 'data/test'
 
 n_images_per_dir: 1000
 
-training:
-  image_size: 256
-  kernel_size: 3
-  max_pool: 2
-  conv_1_filters: 32
-  conv_2_filters: 64
-  conv_3_filters: 128
-  conv_4_filters: 128
-  conv_5_filters: 64
-  dropout: 0.2
-  dense_1_units: 256
-  dense_2_units: 64
-  dense_3_units: 2
-  learning_rate: 0.001
-  batch_size: 50
-  num_epochs: 10
-  random_seed: 23
-  val_split: 0.2
-  output_path: model.h5
+image_size: 256
+kernel_size: 3
+max_pool: 2
+conv_1_filters: 32
+conv_2_filters: 64
+conv_3_filters: 128
+conv_4_filters: 128
+conv_5_filters: 64
+dropout: 0.2
+dense_1_units: 256
+dense_2_units: 64
+dense_3_units: 2
+learning_rate: 0.001
+batch_size: 50
+num_epochs: 10
+random_seed: 23
+val_split: 0.2
+output_path: model.h5

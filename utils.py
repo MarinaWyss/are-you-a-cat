@@ -10,8 +10,6 @@ from random import choice
 
 logging.basicConfig(level=logging.DEBUG)
 
-with open('config.yaml', 'r') as file:
-    configs = yaml.safe_load(file)
 
 def label_img(dir_name: str) -> np.array:
     """Labels images based on their directory name.
@@ -29,7 +27,8 @@ def label_img(dir_name: str) -> np.array:
     else:
         return np.array([0, 1])
 
-def load_data(train: bool = True) -> List:
+def load_data(train: bool,
+              configs: dict) -> List:
     """Loads images, resizes them, and converts them to black and white.
     For faster training/testing, this code only pulls a sample of images
     from each directory, based on a parameter in the config file.
@@ -39,11 +38,14 @@ def load_data(train: bool = True) -> List:
 
     Args:
         train (bool): If True, load train images. Else, test images.
+        configs (dict): Dictionary of configs
 
     Returns:
         (list): List with the image array, label array, and filename
     """
     subdir = configs['image_dir_train'] if train else configs['image_dir_test']
+    logging.info(f'Loading data from the {subdir} sub-directory.')
+
     image_dir = os.path.join(os.path.abspath(os.getcwd()), subdir)
 
     data = []
@@ -61,19 +63,20 @@ def load_data(train: bool = True) -> List:
           img = Image.open(image_path)
           img = img.convert('L')
           img = img.resize(
-              (configs['training']['image_size'],
-               configs['training']['image_size']),
-              Image.ANTIALIAS)
+              (configs['image_size'], configs['image_size']),
+                Image.ANTIALIAS)
           data.append([np.array(img), label, image_path])
     return data
 
-def format_data_for_model(dat_list: List) -> (np.array, np.array, np.array):
+def format_data_for_model(dat_list: List,
+                          configs: dict) -> (np.array, np.array, np.array):
     """Takes in a list including images as np.arrays,
     labels, and image_paths, and reformats them for model
     training/prediction.
 
     Args:
         dat_list (List[np.array, np.array, np.array])
+        configs (dict): Config dictionary
 
     Returns:
          (np.array, np.array, np.array): formatted data for
@@ -81,8 +84,8 @@ def format_data_for_model(dat_list: List) -> (np.array, np.array, np.array):
     """
     images = np.array(
         [i[0] for i in dat_list]).reshape(
-            -1, configs['training']['image_size'],
-            configs['training']['image_size'], 1)
+            -1, configs['image_size'],
+            configs['image_size'], 1)
     labels = np.array([i[1] for i in dat_list])
     image_paths = np.array([i[2] for i in dat_list])
     return images, labels, image_paths

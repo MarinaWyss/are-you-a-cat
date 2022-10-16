@@ -105,10 +105,12 @@ class CatClassifier:
             raise Exception('Error: Initialize model before fitting.')
 
         logging.info('Reading data.')
-        data = load_data(train=True)
+        data = load_data(train=True, configs=self.args)
 
         logging.info('Formatting data.')
-        X_train, y_train, train_paths = format_data_for_model(data)
+        X_train, y_train, train_paths = format_data_for_model(
+            dat_list=data, configs=self.args
+        )
 
         logging.info("Fitting model.")
         self.model.fit(x=X_train,

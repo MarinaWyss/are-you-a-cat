@@ -13,7 +13,7 @@ class TestTrainCatClassifier(unittest.TestCase):
         with open('tests/config_test.yaml', 'r') as file:
             configs = yaml.safe_load(file)
 
-        cls.args = configs['training']
+        cls.args = configs
 
     @mock.patch('cat_classifier.CatClassifier.construct')
     @mock.patch('cat_classifier.CatClassifier.fit')
