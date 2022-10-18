@@ -5,7 +5,7 @@
 
 This repo contains code for the [ZenML Month of MLOps Competition](https://blog.zenml.io/mlops-competition/).
 
-It is a computer vision classifier to predict whether or not you are a cat, based on a selfie uploaded to a streamlit app.
+It is a computer vision classifier to predict if you are a cat, based on a selfie uploaded to a streamlit app.
 
 Dev plan:
 
@@ -23,5 +23,6 @@ Stretch goals:
 
 - [ ] SHAP, to illustrate what properties of the image contributed to the prediction
 - [ ] Model iteration / training with Sagemaker
+- [ ] Orchestration
 - [ ] Monitoring
 - [ ] Read [this book](https://www.amazon.com/Designing-Machine-Learning-Systems-Production-Ready/dp/1098107969) and add ideas to improve the pipeline, probably continuing after the competition.
