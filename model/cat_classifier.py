@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import (
@@ -14,23 +15,29 @@ import tensorflow as tf
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.metrics import AUC, Precision, Recall
 
-from utils import load_data, format_data_for_model
-
 logging.basicConfig(level=logging.DEBUG)
 
 
 class CatClassifier:
     def __init__(self, args):
         self.args = args
-        self.model = None
 
-    def construct(self):
-        """Construct model.
+    def train(self,
+              X_train: np.array,
+              y_train: np.array):
+        """Train model.
 
         Heavily inspired by
         https://github.com/rpeden/cat-or-not/blob/master/train.py
+
+        Args:
+            X_train (np.array): Array of train images
+            y_train (np.array): Array of training labels
+
+        Returns:
+            (tf.Keras.model): Trained model
         """
-        logging.info("Constructing model.")
+        logging.info("Constructing model...")
 
         cnn2d = Sequential()
         cnn2d.add(
@@ -89,52 +96,28 @@ class CatClassifier:
         cnn2d.compile(loss='binary_crossentropy',
                       optimizer=Adam(learning_rate=self.args['learning_rate']),
                       metrics=[AUC(), Precision(), Recall()])
-
         logging.info("Model compiled.")
 
-        self.model = cnn2d
-        return self.model
-
-    def fit(self):
-        """Fit model.
-
-        Raises:
-            Exception, if the model is not already initialized.
-        """
-        if not self.model:
-            raise Exception('Error: Initialize model before fitting.')
-
-        logging.info('Reading data.')
-        data = load_data(train=True, configs=self.args)
-
-        logging.info('Formatting data.')
-        X_train, y_train, train_paths = format_data_for_model(
-            dat_list=data, configs=self.args
-        )
-
-        logging.info("Fitting model.")
-        self.model.fit(x=X_train,
-                       y=y_train,
-                       epochs=self.args['num_epochs'],
-                       batch_size=self.args['batch_size'],
-                       validation_split=self.args['val_split'],
-                       seed=self.args['random_seed'],
-                       shuffle=True,
-                       )
+        logging.info("Fitting model...")
+        cnn2d.fit(x=X_train,
+                  y=y_train,
+                  epochs=self.args['num_epochs'],
+                  batch_size=self.args['batch_size'],
+                  validation_split=self.args['val_split'],
+                  seed=self.args['random_seed'],
+                  shuffle=True)
 
         logging.info("Model successfully fit.")
+        return cnn2d
 
-    def save(self):
+    def save(self, model):
         """Save model.
 
-        Raises:
-            Exception, if the model is not already initialized.
+        Args:
+            model: Trained tf.keras.model
         """
-        if not self.model:
-            raise Exception('Error: Initialize model before saving.')
-
         tf.keras.models.save_model(
-            self.model,
+            model,
             filepath=self.args['output_path'],
             save_format='h5'
         )

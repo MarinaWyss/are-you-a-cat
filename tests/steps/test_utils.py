@@ -2,7 +2,7 @@ import yaml
 import numpy as np
 import unittest
 
-import utils
+from steps import utils
 
 
 class TestUtils(unittest.TestCase):

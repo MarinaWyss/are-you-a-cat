@@ -1,5 +1,6 @@
 image_dir_train: 'data/train'
 image_dir_test: 'data/test'
+output_path: 'saved_model/model.h5'
 
 n_images_per_dir: 1000
 
@@ -20,4 +21,3 @@ batch_size: 50
 num_epochs: 10
 random_seed: 23
 val_split: 0.2
-output_path: model.h5

@@ -1,5 +1,4 @@
 import os
-import yaml
 import logging
 from typing import List
 
@@ -27,6 +26,7 @@ def label_img(dir_name: str) -> np.array:
     else:
         return np.array([0, 1])
 
+
 def load_data(train: bool,
               configs: dict) -> List:
     """Loads images, resizes them, and converts them to black and white.
@@ -52,21 +52,22 @@ def load_data(train: bool,
     directories = next(os.walk(image_dir))[1]
 
     for dirname in directories:
-      logging.info(f'Loading images from the {dirname} directory.')
-      file_names = next(os.walk(os.path.join(image_dir, dirname)))[2]
+        logging.info(f'Loading images from the {dirname} directory.')
+        file_names = next(os.walk(os.path.join(image_dir, dirname)))[2]
 
-      for i in range(configs['n_images_per_dir']):
-        image_name = choice(file_names)
-        image_path = os.path.join(image_dir, dirname, image_name)
-        label = label_img(dirname)
-        if 'DS_Store' not in image_path and '.csv' not in image_path:
-          img = Image.open(image_path)
-          img = img.convert('L')
-          img = img.resize(
-              (configs['image_size'], configs['image_size']),
-                Image.ANTIALIAS)
-          data.append([np.array(img), label, image_path])
+        for i in range(configs['n_images_per_dir']):
+            image_name = choice(file_names)
+            image_path = os.path.join(image_dir, dirname, image_name)
+            label = label_img(dirname)
+            if 'DS_Store' not in image_path and '.csv' not in image_path:
+                img = Image.open(image_path)
+                img = img.convert('L')
+                img = img.resize(
+                    (configs['image_size'], configs['image_size']),
+                    Image.ANTIALIAS)
+                data.append([np.array(img), label, image_path])
     return data
+
 
 def format_data_for_model(dat_list: List,
                           configs: dict) -> (np.array, np.array, np.array):
@@ -84,8 +85,7 @@ def format_data_for_model(dat_list: List,
     """
     images = np.array(
         [i[0] for i in dat_list]).reshape(
-            -1, configs['image_size'],
-            configs['image_size'], 1)
+        -1, configs['image_size'], configs['image_size'], 1)
     labels = np.array([i[1] for i in dat_list])
     image_paths = np.array([i[2] for i in dat_list])
     return images, labels, image_paths
