@@ -1,6 +1,7 @@
 import logging
 import numpy as np
 
+# TODO random seed
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import (
     Dense,
@@ -104,7 +105,6 @@ class CatClassifier:
                   epochs=self.args['num_epochs'],
                   batch_size=self.args['batch_size'],
                   validation_split=self.args['val_split'],
-                  seed=self.args['random_seed'],
                   shuffle=True)
 
         logging.info("Model successfully fit.")
