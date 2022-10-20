@@ -1,6 +1,5 @@
 import logging
-import numpy as np
-
+from typing import Tuple
 from zenml.steps import step
 
 from steps.utils import load_data, format_data_for_model
@@ -10,7 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 @step
 def prepare_data(train: bool,
-                 configs: dict) -> (np.array, np.array, np.array):
+                 configs: dict) -> Tuple:
     """Loads the data and formats it for the model.
 
     Args:

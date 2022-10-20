@@ -1,6 +1,6 @@
 import os
 import logging
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 
@@ -70,7 +70,7 @@ def load_data(train: bool,
 
 
 def format_data_for_model(dat_list: List,
-                          configs: dict) -> (np.array, np.array, np.array):
+                          configs: dict) -> Tuple:
     """Takes in a list including images as np.arrays,
     labels, and image_paths, and reformats them for model
     training/prediction.
