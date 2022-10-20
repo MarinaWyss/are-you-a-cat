@@ -1,7 +1,7 @@
 import yaml
 import unittest
 
-from steps.load_data import prepare_data
+from steps.prepare_data import prepare_data
 
 
 class TestLoadData(unittest.TestCase):
