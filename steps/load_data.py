@@ -25,4 +25,6 @@ def prepare_data(train: bool,
     X_train, y_train, train_paths = format_data_for_model(
         dat_list=data, configs=configs
     )
+
+    # TODO normalize X_train
     return X_train, y_train, train_paths

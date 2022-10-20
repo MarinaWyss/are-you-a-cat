@@ -16,7 +16,7 @@ class TestCatClassifier(unittest.TestCase):
             configs = yaml.safe_load(file)
 
         cls.args = configs
-        cls.X_train = np.zeros(256)
+        cls.X_train = np.random.randint(1, 256, (256, 256))
         cls.y_train = np.array([1, 0])
 
     def test_initialize_class(self):
