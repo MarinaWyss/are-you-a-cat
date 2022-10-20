@@ -10,7 +10,7 @@ class TestUtils(unittest.TestCase):
     """Test util functions."""
     @classmethod
     def setUpClass(cls):
-        with open('config_test.yaml', 'r') as file:
+        with open('tests/config_test.yaml', 'r') as file:
             configs = yaml.safe_load(file)
 
         cls.configs = configs
