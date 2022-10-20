@@ -1,26 +1,25 @@
-import yaml
 import logging
-
 import numpy as np
 
 from zenml.steps import step
 
 from utils import load_data, format_data_for_model
 
+logging.basicConfig(level=logging.DEBUG)
+
 
 @step
-def prepare_data(train: bool) -> (np.array, np.array, np.array):
+def prepare_data(train: bool,
+                 configs: dict) -> (np.array, np.array, np.array):
     """Loads the data and formats it for the model.
 
     Args:
         train (bool): If True, grab training data. Else, test data.
+        configs (dict): Config file
 
     Returns:
         (np.array, np.array, np.array): Images, labels, and image paths.
     """
-    with open('config.yaml', 'r') as file:
-        configs = yaml.safe_load(file)
-
     data = load_data(train=train, configs=configs)
 
     logging.info('Formatting data.')
