@@ -47,13 +47,13 @@ class TestUtils(unittest.TestCase):
             configs=self.configs
         )
         images, labels, paths = utils.format_data_for_model(
-            dat_list,
-            self.configs
+            dat_list=dat_list,
+            configs=self.configs
         )
 
         self.assertEqual(len(images), 20)
-        self.assertLess(np.max(images), 1)
-        self.assertGreater(np.min(images), 0)
+        self.assertLessEqual(np.max(images), 1)
+        self.assertGreaterEqual(np.min(images), 0)
         self.assertEqual(len(labels), 20)
         self.assertEqual(len(paths), 20)
         self.assertEqual(labels.mean(), 0.5)
