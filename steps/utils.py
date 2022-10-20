@@ -86,6 +86,10 @@ def format_data_for_model(dat_list: List,
     images = np.array(
         [i[0] for i in dat_list]).reshape(
         -1, configs['image_size'], configs['image_size'], 1)
+    # normalizing images to 0-1
+    images = images/255.
+
     labels = np.array([i[1] for i in dat_list])
+
     image_paths = np.array([i[2] for i in dat_list])
     return images, labels, image_paths

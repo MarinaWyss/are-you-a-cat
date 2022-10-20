@@ -52,6 +52,8 @@ class TestUtils(unittest.TestCase):
         )
 
         self.assertEqual(len(images), 20)
+        self.assertLess(np.max(images), 1)
+        self.assertGreater(np.min(images), 0)
         self.assertEqual(len(labels), 20)
         self.assertEqual(len(paths), 20)
         self.assertEqual(labels.mean(), 0.5)
