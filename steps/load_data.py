@@ -3,7 +3,7 @@ import numpy as np
 
 from zenml.steps import step
 
-from utils import load_data, format_data_for_model
+from steps.utils import load_data, format_data_for_model
 
 logging.basicConfig(level=logging.DEBUG)
 
