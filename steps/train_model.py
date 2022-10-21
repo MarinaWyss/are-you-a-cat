@@ -13,14 +13,14 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 @step(enable_cache=False, experiment_tracker="mlflow_tracker")
-def train_model(X_train: np.array,
-                y_train: np.array) -> tf.keras.Model:
+def train_model(X_train: np.ndarray,
+                y_train: np.ndarray) -> tf.keras.Model:
     """Trains the cat classifier model, logs the run to MLFLow,
     and saves the trained model locally.
 
     Args:
-        X_train (np.array): Array of train images
-        y_train (np.array): Array of training labels
+        X_train (np.ndarray): Array of train images
+        y_train (np.ndarray): Array of training labels
 
     Returns:
         (tf.Keras.model): Trained model

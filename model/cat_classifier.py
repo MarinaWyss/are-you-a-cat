@@ -24,16 +24,16 @@ class CatClassifier:
         self.args = args
 
     def train(self,
-              X_train: np.array,
-              y_train: np.array):
+              X_train: np.ndarray,
+              y_train: np.ndarray):
         """Train model.
 
         Heavily inspired by
         https://github.com/rpeden/cat-or-not/blob/master/train.py
 
         Args:
-            X_train (np.array): Array of train images
-            y_train (np.array): Array of training labels
+            X_train (np.ndarray): Array of train images
+            y_train (np.ndarray): Array of training labels
 
         Returns:
             (tf.Keras.model): Trained model

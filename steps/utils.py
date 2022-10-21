@@ -10,7 +10,7 @@ from random import choice
 logging.basicConfig(level=logging.DEBUG)
 
 
-def label_img(dir_name: str) -> np.array:
+def label_img(dir_name: str) -> np.ndarray:
     """Labels images based on their directory name.
     Images in the  `cats` directory are positive cases,
     while any other dir name is labeled negative.
@@ -19,7 +19,7 @@ def label_img(dir_name: str) -> np.array:
         dir_name (str): Directory name.
 
     Returns:
-        (np.array): Array with shape (2, )
+        (np.ndarray): Array with shape (2, )
     """
     if dir_name == 'cats':
         return np.array([1, 0])
@@ -71,16 +71,16 @@ def load_data(train: bool,
 
 def format_data_for_model(dat_list: List,
                           configs: dict) -> Tuple:
-    """Takes in a list including images as np.arrays,
+    """Takes in a list including images as np.ndarrays,
     labels, and image_paths, and reformats them for model
     training/prediction.
 
     Args:
-        dat_list (List[np.array, np.array, np.array])
+        dat_list (List[np.ndarray, np.ndarray, np.ndarray])
         configs (dict): Config dictionary
 
     Returns:
-         (np.array, np.array, np.array): formatted data for
+         (np.ndarray, np.ndarray, np.ndarray): formatted data for
          model training or prediction.
     """
     images = np.array(

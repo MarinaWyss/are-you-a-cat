@@ -11,8 +11,8 @@ logging.basicConfig(level=logging.DEBUG)
 
 @step
 def evaluate_model(model: tf.keras.Model,
-                   X_test: np.array,
-                   y_test: np.array) -> float:
+                   X_test: np.ndarray,
+                   y_test: np.ndarray) -> float:
     """
     TODO actually set this up
     """
