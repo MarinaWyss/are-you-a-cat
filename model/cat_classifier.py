@@ -121,4 +121,4 @@ class CatClassifier:
             filepath=self.args['output_path'],
             save_format='h5'
         )
-        logging.info("Model saved.")
+        logging.info(f"Model saved to {self.args['output_path']}.")
