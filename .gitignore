@@ -5,3 +5,4 @@ data/test/
 data/train/
 steps/__pycache__/
 *.pyc
+.zen/
