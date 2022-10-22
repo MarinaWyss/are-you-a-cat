@@ -20,4 +20,3 @@ learning_rate: 0.001
 batch_size: 50
 num_epochs: 10
 random_seed: 23
-val_split: 0.2

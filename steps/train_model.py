@@ -13,8 +13,7 @@ from model.cat_classifier import CatClassifier
 logging.basicConfig(level=logging.DEBUG)
 
 
-@step(enable_cache=False,
-      output_materializers=KerasMaterializer,
+@step(output_materializers=KerasMaterializer,
       experiment_tracker="mlflow_tracker")
 def train_model(X_train: np.ndarray,
                 y_train: np.ndarray) -> tf.keras.Model:

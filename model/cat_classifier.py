@@ -103,9 +103,7 @@ class CatClassifier:
         cnn2d.fit(x=X_train,
                   y=y_train,
                   epochs=self.args['num_epochs'],
-                  batch_size=self.args['batch_size'],
-                  validation_split=self.args['val_split'],
-                  shuffle=True)
+                  batch_size=self.args['batch_size'])
 
         logging.info("Model successfully fit.")
         return cnn2d
