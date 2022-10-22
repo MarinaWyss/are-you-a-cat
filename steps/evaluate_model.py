@@ -1,3 +1,4 @@
+import yaml
 import logging
 
 import mlflow
@@ -32,13 +33,20 @@ def evaluate_model(model: tf.keras.Model,
     Raises:
         Exception if any of the metrics calculations fail
     """
+    with open('steps/config.yaml', 'r') as file:
+        configs = yaml.safe_load(file)
+
     logging.info("Beginning model evaluation...")
 
     try:
         logging.info("Predicting on the test set...")
-        prediction = model.predict(X_test)
+        y_test = y_test[:, 0]
         evaluation = Evaluation()
 
+        prediction = model.predict(X_test)[:, 0]
+        prediction = np.where(prediction > configs['classification_cutoff'], 1, 0)
+
+        logging.info(f"Calculating metrics with cut-off {configs['classification_cutoff']}...")
         precision = evaluation.precision(y_test, prediction)
         mlflow.log_metric("test_precision", precision)
 
@@ -54,3 +62,7 @@ def evaluate_model(model: tf.keras.Model,
     except Exception as e:
         logging.error(e)
         raise e
+
+
+
+model = tf.keras.models.load_model('saved_model/model.h5')
