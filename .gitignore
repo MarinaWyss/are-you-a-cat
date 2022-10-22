@@ -3,6 +3,6 @@
 venv*/
 data/test/
 data/train/
-steps/__pycache__/
 *.pyc
+*__pycache__*
 .zen/

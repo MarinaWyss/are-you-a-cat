@@ -1,7 +1,6 @@
 from steps.import_data import import_data
 from steps.train_model import train_model
 from steps.evaluate_model import evaluate_model
-
 from pipelines.training_pipeline import train_pipeline
 
 

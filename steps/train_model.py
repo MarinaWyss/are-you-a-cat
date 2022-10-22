@@ -6,13 +6,16 @@ import mlflow
 import tensorflow as tf
 
 from zenml.steps import step
+from zenml.integrations.tensorflow.materializers import KerasMaterializer
 
 from model.cat_classifier import CatClassifier
 
 logging.basicConfig(level=logging.DEBUG)
 
 
-@step(enable_cache=False, experiment_tracker="mlflow_tracker")
+@step(enable_cache=False,
+      output_materializers=KerasMaterializer,
+      experiment_tracker="mlflow_tracker")
 def train_model(X_train: np.ndarray,
                 y_train: np.ndarray) -> tf.keras.Model:
     """Trains the cat classifier model, logs the run to MLFLow,
@@ -25,7 +28,7 @@ def train_model(X_train: np.ndarray,
     Returns:
         (tf.Keras.model): Trained model
     """
-    with open('config.yaml', 'r') as file:
+    with open('steps/config.yaml', 'r') as file:
         configs = yaml.safe_load(file)
 
     mlflow.tensorflow.autolog()

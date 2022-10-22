@@ -16,7 +16,7 @@ def evaluate_model(model: tf.keras.Model,
     """
     TODO actually set this up
     """
-    with open('config.yaml', 'r') as file:
+    with open('steps/config.yaml', 'r') as file:
         configs = yaml.safe_load(file)
 
     return 0.9

@@ -17,7 +17,7 @@ def import_data() -> Output(
     y_test=np.ndarray,
 ):
     """Loads the data and formats it for the model."""
-    with open('config.yaml', 'r') as file:
+    with open('steps/config.yaml', 'r') as file:
         configs = yaml.safe_load(file)
 
     train_data = load_data(train=True, configs=configs)
