@@ -1,8 +1,4 @@
-import logging
-
 from zenml.pipelines import pipeline
-
-logging.basicConfig(level=logging.DEBUG)
 
 
 @pipeline

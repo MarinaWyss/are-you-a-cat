@@ -37,7 +37,7 @@ def train_model(X_train: np.ndarray,
     logging.info("Starting training...")
     model = cat_classifier.train(X_train, y_train)
 
-    logging.info("Model trained. Saving model...")
+    logging.info("Saving model...")
     cat_classifier.save(model)
     logging.info("Done.")
     return model
