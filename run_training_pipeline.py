@@ -22,8 +22,3 @@ def run_training():
 
 if __name__ == "__main__":
     run_training()
-
-    logging.info(
-        "Now run \n "
-        f"    mlflow ui --backend-store-uri {get_tracking_uri()}\n"
-        "To inspect experiment runs within the mlflow UI.")
