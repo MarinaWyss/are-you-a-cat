@@ -1,4 +1,5 @@
 import logging
+import datetime
 import numpy as np
 
 # TODO random seed
@@ -114,9 +115,11 @@ class CatClassifier:
         Args:
             model: Trained tf.keras.model
         """
+        time = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+
         tf.keras.models.save_model(
             model,
-            filepath=self.args['output_path'],
+            filepath=f"{self.args['output_path']}-{time}",
             save_format='h5'
         )
-        logging.info(f"Model saved to {self.args['output_path']}.")
+        logging.info(f"Model saved to {self.args['output_path']}-{time}.")
