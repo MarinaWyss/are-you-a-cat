@@ -116,10 +116,11 @@ class CatClassifier:
             model: Trained tf.keras.model
         """
         time = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        out_path = f"{self.args['output_path']}/model-{time}.h5"
 
         tf.keras.models.save_model(
             model,
-            filepath=f"{self.args['output_path']}-{time}",
+            filepath=out_path,
             save_format='h5'
         )
-        logging.info(f"Model saved to {self.args['output_path']}-{time}.")
+        logging.info(f"Model saved to {out_path}.")
