@@ -6,3 +6,4 @@ data/train/
 *.pyc
 *__pycache__*
 .zen/
+mlruns/
