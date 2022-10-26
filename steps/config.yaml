@@ -1,6 +1,6 @@
 image_dir_train: 'data/train'
 image_dir_test: 'data/test'
-output_path: 'saved_model'
+output_path: 'saved_model/model.h5'
 
 n_images_per_dir: 1000
 
@@ -18,7 +18,7 @@ dense_2_units: 64
 dense_3_units: 2
 learning_rate: 0.001
 batch_size: 50
-num_epochs: 5
-random_seed: 0
+num_epochs: 10
+random_seed: 23
 
 classification_cutoff: 0.5

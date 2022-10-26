@@ -12,8 +12,8 @@ from model.evaluator import Evaluation
 logging.basicConfig(level=logging.DEBUG)
 
 
-@step()
-def evaluate_model(trained_model: tf.keras.Model,
+@step(experiment_tracker="mlflow_tracker")
+def evaluate_model(model: tf.keras.Model,
                    X_test: np.ndarray,
                    y_test: np.ndarray) -> Output(
                                             precision=float,
@@ -23,7 +23,7 @@ def evaluate_model(trained_model: tf.keras.Model,
     Logs the model performance to MLFlow.
 
     Args:
-        trained_model (tf.keras.Model): Trained tf.keras model
+        model (tf.keras.Model): Trained tf.keras model
         X_test (np.ndarray): Array of test images
         y_test (np.ndarray): Array of test labels
 
@@ -43,7 +43,7 @@ def evaluate_model(trained_model: tf.keras.Model,
         y_test = y_test[:, 0]
         evaluation = Evaluation()
 
-        prediction = trained_model.predict(X_test)[:, 0]
+        prediction = model.predict(X_test)[:, 0]
         prediction = np.where(prediction > configs['classification_cutoff'], 1, 0)
 
         logging.info(f"Calculating metrics with cut-off {configs['classification_cutoff']}...")

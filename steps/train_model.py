@@ -5,7 +5,7 @@ import numpy as np
 import mlflow
 import tensorflow as tf
 
-from zenml.steps import step, Output
+from zenml.steps import step
 from zenml.integrations.tensorflow.materializers import KerasMaterializer
 
 from model.cat_classifier import CatClassifier
@@ -13,9 +13,10 @@ from model.cat_classifier import CatClassifier
 logging.basicConfig(level=logging.DEBUG)
 
 
-@step(output_materializers=KerasMaterializer)
+@step(output_materializers=KerasMaterializer,
+      experiment_tracker="mlflow_tracker")
 def train_model(X_train: np.ndarray,
-                y_train: np.ndarray) -> Output(model=tf.keras.Model):
+                y_train: np.ndarray) -> tf.keras.Model:
     """Trains the cat classifier model, logs the run to MLFLow,
     and saves the trained model locally.
 

@@ -1,11 +1,7 @@
-from zenml.integrations.constants import MLFLOW
-from zenml.config import DockerSettings
 from zenml.pipelines import pipeline
 
-docker_settings = DockerSettings(required_integrations=[MLFLOW])
 
-
-@pipeline(enable_cache=True, settings={"docker": docker_settings})
+@pipeline
 def train_pipeline(import_data, train_model, evaluate_model):
     """
     Args:
@@ -20,3 +16,4 @@ def train_pipeline(import_data, train_model, evaluate_model):
     X_train, y_train, X_test, y_test = import_data()
     model = train_model(X_train, y_train)
     precision, recall, f1 = evaluate_model(model, X_test, y_test)
+    return precision, recall, f1
