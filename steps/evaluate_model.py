@@ -12,7 +12,7 @@ from model.evaluator import Evaluation
 logging.basicConfig(level=logging.DEBUG)
 
 
-@step()
+@step(experiment_tracker="mlflow_tracker")
 def evaluate_model(trained_model: tf.keras.Model,
                    X_test: np.ndarray,
                    y_test: np.ndarray) -> Output(

@@ -13,7 +13,8 @@ from model.cat_classifier import CatClassifier
 logging.basicConfig(level=logging.DEBUG)
 
 
-@step(output_materializers=KerasMaterializer)
+@step(output_materializers=KerasMaterializer,
+      experiment_tracker="mlflow_tracker")
 def train_model(X_train: np.ndarray,
                 y_train: np.ndarray) -> Output(model=tf.keras.Model):
     """Trains the cat classifier model, logs the run to MLFLow,
