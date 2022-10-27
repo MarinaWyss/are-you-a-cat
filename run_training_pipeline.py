@@ -1,7 +1,5 @@
 import logging
 
-from zenml.integrations.mlflow.mlflow_utils import get_tracking_uri
-
 from steps.import_data import import_data
 from steps.train_model import train_model
 from steps.evaluate_model import evaluate_model
