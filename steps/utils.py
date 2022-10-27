@@ -93,3 +93,20 @@ def format_data_for_model(dat_list: List,
 
     image_paths = np.array([i[2] for i in dat_list])
     return images, labels, image_paths
+
+
+def get_data_for_test():
+    """
+        try:
+        df = pd.read_csv("./data/olist_customers_dataset.csv")
+        df = df.sample(n=100)
+        data_clean = DataCleaning(df)
+        df = data_clean.preprocess_data()
+        df.drop(["review_score"], axis=1, inplace=True)
+        result = df.to_json(orient="split")
+        return result
+    except Exception as e:
+        logging.error(e)
+        raise e
+    """
+    pass

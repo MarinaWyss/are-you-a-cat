@@ -4,7 +4,7 @@ import numpy as np
 
 from zenml.steps import step, Output
 
-from steps.utils import load_data, format_data_for_model
+from steps.utils import load_data, format_data_for_model, get_data_for_test
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -33,3 +33,10 @@ def import_data() -> Output(
     )
 
     return X_train, y_train, X_test, y_test
+
+
+@step()
+def dynamic_importer() -> Output(data=str):
+    """Downloads the latest data from a mock API."""
+    data = get_data_for_test()
+    return data
