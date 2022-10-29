@@ -7,7 +7,3 @@ tensorflow>=2.0.0
 PyYAML~=5.4.1
 mlflow~=1.25.1
 scikit-learn~=1.1.2
-streamlit~=1.14.0
-scikit-image~=0.19.3
-shap~=0.41.0
-keras_tuner~=1.1.3
