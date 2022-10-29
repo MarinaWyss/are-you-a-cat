@@ -52,21 +52,17 @@ def prediction_service_loader(
 @step()
 def predictor(
     service: MLFlowDeploymentService,
-    data: str,
+    data: np.ndarray,
 ) -> np.ndarray:
     """Run an inference request against a prediction service.
 
     Args:
         service (MLFlowDeploymentService)
-        data (str): Image data formatted as a string?
+        data (np.ndarray): Image formatted as an array
 
     Returns:
         (np.ndarray) Prediction
     """
     service.start(timeout=10)  # should be a NOP if already started
-    data = json.loads(data)
-    # TODO format image data
-    json_list = json.loads(json.dumps(list(data.T.to_dict().values())))
-    data = np.array(json_list)
-    prediction = service.predict(data)
+    prediction = service.predict(data)[:, 0]
     return prediction

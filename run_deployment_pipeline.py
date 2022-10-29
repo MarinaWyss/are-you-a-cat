@@ -1,6 +1,6 @@
 import yaml
+import argparse
 
-from zenml.integrations.mlflow.mlflow_utils import get_tracking_uri
 from zenml.integrations.mlflow.steps import MLFlowDeployerParameters
 from zenml.services import load_last_service_from_step
 from zenml.integrations.mlflow.steps import mlflow_model_deployer_step
@@ -22,7 +22,7 @@ from pipelines.deployment_pipeline import continuous_deployment_pipeline
 from pipelines.inference_pipeline import inference_pipeline
 
 
-def run_main(stop_service: bool):
+def run_main(stop_service: bool = None):
     """Run the mlflow example pipeline"""
     with open('steps/config.yaml', 'r') as file:
         configs = yaml.safe_load(file)
@@ -48,10 +48,10 @@ def run_main(stop_service: bool):
             )
         ),
         model_deployer=mlflow_model_deployer_step(
-            params=MLFlowDeployerParameters(workers=3)
+            params=MLFlowDeployerParameters()
         ),
     )
-    deployment.run(config_path='config.yaml')
+    deployment.run()
 
     inference = inference_pipeline(
         dynamic_importer=dynamic_importer(),
@@ -64,14 +64,6 @@ def run_main(stop_service: bool):
         predictor=predictor(),
     )
     inference.run()
-
-    print(
-        "Now run \n "
-        f"    mlflow ui --backend-store-uri {get_tracking_uri()}\n"
-        "To inspect your experiment runs within the mlflow UI.\n"
-        "You can find your runs tracked within the `mlflow_example_pipeline`"
-        "experiment. Here you'll also be able to compare the two runs.)"
-    )
 
     model_deployer = MLFlowModelDeployer.get_active_model_deployer()
 
@@ -88,9 +80,13 @@ def run_main(stop_service: bool):
             f"and accepts inference requests at:\n"
             f"    {service[0].prediction_url}\n"
             f"To stop the service, re-run the same command and supply the "
-            f"`--stop-service` argument."
+            f"`--stop_service` argument."
         )
 
 
 if __name__ == "__main__":
-    run_main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('stop_service',
+                        action='store_true')
+    args = parser.parse_args()
+    run_main(args.stop_service)
