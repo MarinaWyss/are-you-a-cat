@@ -27,13 +27,17 @@ Training data for this project comes from the following datasets:
 - [Selfies](https://www.kaggle.com/datasets/jigrubhatt/selfieimagedetectiondataset)
 - [Random images](https://www.kaggle.com/datasets/shamsaddin97/image-captioning-dataset-random-images?resource=download)
 
-I'm using a random sample from each of the above. For training I used 25% cat images, 25% dogs, 25% selfies, and 25% misc.
+I'm using a random sample from each of the above. For training, I used 25% cat images, 25% dogs, 25% selfies, and 25% misc.
 
 Data prep is simple: The images are reshaped and normalized. That's it for now!
 
 ###### Model
 
-The model for this project is a 2D CNN, implemented with Tensorflow Keras. The model and training metrics are saved using MLFlow autologging.
+The model for this project is a 2D CNN, implemented with Tensorflow Keras. The model, hyperparameters, and training metrics are saved using MLFlow autologging as experiment tracking artifacts.
+
+The model's hyperparameters were tuned using `keras_tuner`. The best model configuration achieves recall of <> and precision of <> on a hold-out test set.
+
+Note that there are several limitations to the current model training, which are noted below.
 
 ###### Evaluation
 
@@ -41,6 +45,45 @@ The trained model predicts on a hold-out validation set, and logs those metrics 
 
 ##### Deployment Pipeline
 
-The deployment 
+The deployment pipeline extends the training pipeline and implements a continuous deployment workflow. It preps the input data, trains a model, and (re)deploys the prediction server that serves the model if it meets some evaluation criteria (minimum recall and precision).
 
+###### Deployment Trigger
 
+After the model is trained and evaluated, the deployment trigger step checks whether the newly trained model meets the criteria set for deployment.
+
+###### Model Deployer
+
+This step deploys the model as a service using MLflow (if deployment criteria is met). 
+
+The MLflow deployment server runs locally as a daemon process that will continue to run in the background after the example execution is complete. When a new pipeline is run which produces a model that passes the evaluation checks, the pipeline automatically updates the currently-running MLflow deployment server to serve the new model instead of the old one.
+
+##### Streamlit Application
+
+For inference, I have a Streamlit application that consumes the latest model service asynchronously from the pipeline logic. It will be linked here once it's ready.
+
+The Streamlit app takes in a photo (selfie), and returns the probability that you are a cat, as well as a SHAP explanation of why the prediction was made for this particular photo.
+
+#### Limitations
+
+This pipeline is a simple first pass, and has some major limitations. Some things I plan to incorporate in the future include:
+
+- Model/Training:
+  - Currently, I'm training locally (no GPU!) on a small dataset. In the future, training should be done in the cloud (i.e. Sagemaker).
+  - Hyperparameter tuning is ad-hoc and manual. ZenML is planning hyperparameter tuning support in the future, so I'll add that once it's available.
+  - I haven't done any in-depth model performance work yet (e.g. no error analysis or real experimentation). 
+  - Model training is slow. This may be because I'm using a dinky laptop at the moment, but there may be ways to improve the efficiency of model training.
+- Deployment:
+  - Deployment is currently happening locally via MLflow. In the future I will migrate this to Seldon or KServe for deployment in a more production-friendly setting.
+- Monitoring:
+  - I don't have anything set up besides basic logging yet >.<
+  - In particular, I have no idea how the model will perform on real data (which may differ significantly from the training set I used). I also have no way to track this/gather feedback or more labels.
+  - Similarly, because I don't know what the input data look like, I cannot do any drift detection. Basically I need some data validation capability.
+  - I also don't know any performance metrics for the app. From my first tests it seems to have a latency issue...
+  - There is also no way for me to know about errors users get from the app (for example, I don't know what happens if someone uploads a document instead of a photo).
+- Orchestration:
+  - Running the pipeline is currently ad-hoc and manual. In the future if I was able to store incoming images/build the training dataset in some automated way, I could schedule periodic re-training with Airflow.
+    - It would be even cooler if I could do some kind of continual learning approach so that I don't need to store the images at all...
+- Misc:
+  - Sphinx docs would be nice.
+  - Dockerizing might make sense.
+  - There are likely opportunities for better testing, since currently the tests I havev are quite minimal.
