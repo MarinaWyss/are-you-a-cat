@@ -101,11 +101,15 @@ class CatClassifier:
         logging.info("Model compiled.")
 
         logging.info("Fitting model...")
-        cnn2d.fit(x=X_train,
-                  y=y_train,
-                  epochs=self.args['num_epochs'],
-                  batch_size=self.args['batch_size'])
-
+        stop_early = tf.keras.callbacks.EarlyStopping(
+            monitor='val_loss', patience=5)
+        cnn2d.fit(
+            x=X_train,
+            y=y_train,
+            epochs=self.args['num_epochs'],
+            batch_size=self.args['batch_size'],
+            callbacks=[stop_early]
+        )
         logging.info("Model successfully fit.")
         return cnn2d
 

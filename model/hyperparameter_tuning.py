@@ -100,7 +100,7 @@ def main():
     tuner = kt.Hyperband(hypermodel=build_model,
                          objective=kt.Objective("val_auc", direction="max"),
                          max_epochs=20,
-                         project_name="hyperband_tuner")
+                         project_name="hyperband_tuner2")
 
     logging.info("Starting tuning job...")
     stop_early = tf.keras.callbacks.EarlyStopping(
@@ -116,7 +116,7 @@ def main():
 
     logging.info("The best hyperparams are:")
     best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
-    print(best_hps)
+    logging.info(best_hps)
 
 
 if __name__ == '__main__':

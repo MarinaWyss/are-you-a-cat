@@ -68,9 +68,9 @@ The Streamlit app takes in a photo (selfie), and returns the probability that yo
 This pipeline is a simple first pass, and has some major limitations. Some things I plan to incorporate in the future include:
 
 - Model/Training:
-  - Currently, I'm training locally (no GPU!) on a small dataset. In the future, training should be done in the cloud (i.e. Sagemaker).
+  - Currently, I'm training locally (no GPU!) on a small dataset. In the future, training should be done in the cloud (i.e. Sagemaker) with more data/maybe for longer.
   - Hyperparameter tuning is ad-hoc and manual. ZenML is planning hyperparameter tuning support in the future, so I'll add that once it's available.
-  - I haven't done any in-depth model performance work yet (e.g. no error analysis or real experimentation). 
+  - I haven't done any in-depth model performance work yet (e.g. no error analysis or real experimentation). I haven't even tuned the classification cut-off.
   - Model training is slow. This may be because I'm using a dinky laptop at the moment, but there may be ways to improve the efficiency of model training.
 - Deployment:
   - Deployment is currently happening locally via MLflow. In the future I will migrate this to Seldon or KServe for deployment in a more production-friendly setting.
