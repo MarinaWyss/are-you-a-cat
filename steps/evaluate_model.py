@@ -62,7 +62,3 @@ def evaluate_model(trained_model: tf.keras.Model,
     except Exception as e:
         logging.error(e)
         raise e
-
-
-
-model = tf.keras.models.load_model('saved_model/model.h5')

@@ -5,7 +5,7 @@ from zenml.pipelines import pipeline
 docker_settings = DockerSettings(required_integrations=[MLFLOW])
 
 
-@pipeline(enable_cache=False, settings={"docker": docker_settings})
+@pipeline(enable_cache=True, settings={"docker": docker_settings})
 def train_pipeline(import_data, train_model, evaluate_model):
     """
     Args:

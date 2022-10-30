@@ -33,15 +33,13 @@ Data prep is simple: The images are reshaped and normalized. That's it for now!
 
 ###### Model
 
-The model for this project is a 2D CNN, implemented with Tensorflow Keras. The model, hyperparameters, and training metrics are saved using MLFlow autologging as experiment tracking artifacts.
+The model for this project is a 2D CNN, implemented with Tensorflow Keras. The model, hyperparameters, and training metrics are saved using MLflow autologging as experiment tracking artifacts.
 
-The model's hyperparameters were tuned using `keras_tuner`. The best model configuration achieves recall of <> and precision of <> on a hold-out test set.
-
-Note that there are several limitations to the current model training, which are noted below.
+The model's hyperparameters were tuned using `keras_tuner`. The best model configuration achieves recall of 0.8 and precision of 0.53 on a hold-out test set. Note that there are several limitations to the current model training, which are noted below, so the performance can certainly be improved on.
 
 ###### Evaluation
 
-The trained model predicts on a hold-out validation set, and logs those metrics to MLFlow as well.
+The trained model predicts on a hold-out validation set, and logs those metrics to MLflow as well.
 
 ##### Deployment Pipeline
 
@@ -49,7 +47,7 @@ The deployment pipeline extends the training pipeline and implements a continuou
 
 ###### Deployment Trigger
 
-After the model is trained and evaluated, the deployment trigger step checks whether the newly trained model meets the criteria set for deployment.
+After the model is trained and evaluated, the deployment trigger step checks whether the newly-trained model meets the criteria set for deployment.
 
 ###### Model Deployer
 
@@ -59,7 +57,7 @@ The MLflow deployment server runs locally as a daemon process that will continue
 
 ##### Streamlit Application
 
-For inference, I have a Streamlit application that consumes the latest model service asynchronously from the pipeline logic. It will be linked here once it's ready.
+For inference, I have a simple Streamlit application that consumes the latest model service asynchronously from the pipeline logic. It will be linked here once it's ready.
 
 The Streamlit app takes in a photo (selfie), and returns the probability that you are a cat, as well as a SHAP explanation of why the prediction was made for this particular photo.
 
@@ -76,14 +74,15 @@ This pipeline is a simple first pass, and has some major limitations. Some thing
   - Deployment is currently happening locally via MLflow. In the future I will migrate this to Seldon or KServe for deployment in a more production-friendly setting.
 - Monitoring:
   - I don't have anything set up besides basic logging yet >.<
-  - In particular, I have no idea how the model will perform on real data (which may differ significantly from the training set I used). I also have no way to track this/gather feedback or more labels.
+    - And I haven't even set up the logs to save after a run...
+  - I have no idea how the model will perform on real data (which may differ significantly from the training set I used). I also have no way to track this/gather feedback or more labels.
   - Similarly, because I don't know what the input data look like, I cannot do any drift detection. Basically I need some data validation capability.
   - I also don't know any performance metrics for the app. From my first tests it seems to have a latency issue...
-  - There is also no way for me to know about errors users get from the app (for example, I don't know what happens if someone uploads a document instead of a photo).
+  - There is also no way for me to know about errors users get from the app (for example, I don't know what happens if someone uploads a document instead of a photo, and on top of that I've done very little to make the app fail gracefully in the case of user error).
 - Orchestration:
   - Running the pipeline is currently ad-hoc and manual. In the future if I was able to store incoming images/build the training dataset in some automated way, I could schedule periodic re-training with Airflow.
     - It would be even cooler if I could do some kind of continual learning approach so that I don't need to store the images at all...
 - Misc:
   - Sphinx docs would be nice.
   - Dockerizing might make sense.
-  - There are likely opportunities for better testing, since currently the tests I havev are quite minimal.
+  - There are likely opportunities for better testing, since currently the tests I have are quite minimal.
