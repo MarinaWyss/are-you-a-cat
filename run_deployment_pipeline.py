@@ -1,8 +1,6 @@
 import yaml
-import argparse
 
 from zenml.integrations.mlflow.steps import MLFlowDeployerParameters
-from zenml.services import load_last_service_from_step
 from zenml.integrations.mlflow.steps import mlflow_model_deployer_step
 from zenml.integrations.mlflow.model_deployers.mlflow_model_deployer import (
     MLFlowModelDeployer,
@@ -22,20 +20,10 @@ from pipelines.deployment_pipeline import continuous_deployment_pipeline
 from pipelines.inference_pipeline import inference_pipeline
 
 
-def run_main(stop_service: bool = None):
+def run_main():
     """Run the mlflow example pipeline"""
     with open('steps/config.yaml', 'r') as file:
         configs = yaml.safe_load(file)
-
-    if stop_service:
-        service = load_last_service_from_step(
-            pipeline_name="continuous_deployment_pipeline",
-            step_name="mlflow_model_deployer_step",
-            running=True,
-        )
-        if service:
-            service.stop(timeout=10)
-        return
 
     deployment = continuous_deployment_pipeline(
         import_data=import_data(),
@@ -85,8 +73,4 @@ def run_main(stop_service: bool = None):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('stop_service',
-                        action='store_true')
-    args = parser.parse_args()
-    run_main(args.stop_service)
+    run_main()

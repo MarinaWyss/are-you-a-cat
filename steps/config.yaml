@@ -18,9 +18,10 @@ dense_2_units: 64
 dense_3_units: 2
 learning_rate: 0.001
 batch_size: 64
-num_epochs: 20
+val_split: 0.2
+num_epochs: 10
 random_seed: 0
 
 classification_cutoff: 0.5
 min_precision: 0.3
-min_recall: 0.3
+min_recall: 0.5

@@ -38,7 +38,8 @@ def main():
     \n
     If the model performance is satisfactory, the model is deployed. \n
     \n
-    There is a lot more I plan to do to improve this pipeline (details in the Github repo README), \
+    There is a lot more I plan to do to improve this pipeline. Details are in \
+    the [Github repo README](https://github.com/MarinaWyss/are-you-a-cat), \
     so keep an eye out for updates.
     """
     )
@@ -57,7 +58,7 @@ def main():
         pred_image = pred_image.reshape(
             -1, configs['image_size'], configs['image_size'], 1)
 
-    st.sidebar.write('\n')  # for new line
+    st.sidebar.write('\n')
     if st.sidebar.button("Predict"):
 
         if uploaded_file is None:
@@ -75,16 +76,16 @@ def main():
                 run_main()
 
             with st.spinner('Classifying...'):
-
                 prediction = service.predict(pred_image)[0][1]
                 st.success('Done!')
 
+            # TODO add SHAP
             if prediction > configs['classification_cutoff']:
                 st.sidebar.write("You are a cat.")
-                # TODO add SHAP
+                st.sidebar.write("Predicted probability:", round(prediction * 100, 2))
             else:
                 st.sidebar.write("You are not a cat.")
-                # TODO add SHAP
+                st.sidebar.write("Predicted probability:", round(prediction * 100, 2))
 
 
 if __name__ == "__main__":
