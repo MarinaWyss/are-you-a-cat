@@ -2,9 +2,9 @@ image_dir_train: 'data/train'
 image_dir_test: 'data/test'
 output_path: 'saved_model'
 
-n_images_per_dir: 1000
-
+n_images_per_dir: 2000
 image_size: 256
+
 kernel_size: 3
 max_pool: 2
 conv_1_filters: 32
@@ -17,8 +17,8 @@ dense_1_units: 256
 dense_2_units: 64
 dense_3_units: 2
 learning_rate: 0.001
-batch_size: 50
-num_epochs: 5
+batch_size: 64
+num_epochs: 20
 random_seed: 0
 
 classification_cutoff: 0.5
