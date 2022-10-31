@@ -1,0 +1,5 @@
+numpy~=1.22.4
+zenml==0.20.5
+Pillow~=9.2.0
+PyYAML~=5.4.1
+streamlit~=1.14.0

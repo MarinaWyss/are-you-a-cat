@@ -1,9 +1,14 @@
+import os
+import sys
 import yaml
 import numpy as np
 from PIL import Image
 
 import streamlit as st
 from zenml.services import load_last_service_from_step
+
+parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+sys.path.append(parent)
 
 from run_deployment_pipeline import run_main
 
