@@ -55,6 +55,10 @@ This step deploys the model as a service using MLflow (if deployment criteria is
 
 The MLflow deployment server runs locally as a daemon process that will continue to run in the background after the example execution is complete. When a new pipeline is run which produces a model that passes the evaluation checks, the pipeline automatically updates the currently-running MLflow deployment server to serve the new model instead of the old one.
 
+##### Inference Pipeline
+
+This project primarily uses a Streamlit application for inference, but it contains a separate inference pipeline for testing as well.
+
 ##### Streamlit Application
 
 For inference, I have a simple Streamlit application that consumes the latest model service asynchronously from the pipeline logic. It will be linked here once it's ready.

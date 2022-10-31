@@ -7,7 +7,7 @@ class DeploymentTriggerConfig(BaseParameters):
     min_recall: float
 
 
-@step
+@step(enable_cache=False)
 def deployment_trigger(
     precision: float,
     recall: float,
@@ -25,7 +25,6 @@ def deployment_trigger(
     Returns:
         (bool) If True, deploy model. Else, stop pipeline.
     """
-
     precision_threshold_met = precision > config.min_precision
     recall_threshold_met = recall > config.min_recall
     conditions_met = precision_threshold_met and recall_threshold_met

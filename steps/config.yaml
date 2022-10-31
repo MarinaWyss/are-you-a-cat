@@ -2,7 +2,7 @@ image_dir_train: 'data/train'
 image_dir_test: 'data/test'
 output_path: 'saved_model'
 
-n_images_per_dir: 2000
+n_images_per_dir: 1000
 image_size: 256
 
 kernel_size: 3
@@ -24,4 +24,4 @@ random_seed: 0
 
 classification_cutoff: 0.5
 min_precision: 0.3
-min_recall: 0.5
+min_recall: 0.6

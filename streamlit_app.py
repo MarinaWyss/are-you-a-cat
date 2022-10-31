@@ -2,8 +2,8 @@ import yaml
 import numpy as np
 from PIL import Image
 from skimage.transform import resize
-
 import streamlit as st
+
 from zenml.services import load_last_service_from_step
 
 from run_deployment_pipeline import run_main
@@ -49,9 +49,9 @@ def main():
     uploaded_file = st.sidebar.file_uploader(" ", type=['png', 'jpg', 'jpeg'])
 
     if uploaded_file is not None:
-        u_img = Image.open(uploaded_file)
+        u_img = Image.open(uploaded_file).convert('L')  # grayscale
         show.image(u_img, caption='This is you.', use_column_width=True)
-        # TODO image validation
+        # TODO input validation
         pred_image = np.asarray(u_img) / 255.
         pred_image = resize(pred_image,
                             (configs['image_size'], configs['image_size']))
@@ -76,16 +76,20 @@ def main():
                 run_main()
 
             with st.spinner('Classifying...'):
-                prediction = service.predict(pred_image)[0][1]
+                prediction = service.predict(pred_image)[:, 0].item()
                 st.success('Done!')
-
-            # TODO add SHAP
-            if prediction > configs['classification_cutoff']:
-                st.sidebar.write("You are a cat.")
-                st.sidebar.write("Predicted probability:", round(prediction * 100, 2))
-            else:
-                st.sidebar.write("You are not a cat.")
-                st.sidebar.write("Predicted probability:", round(prediction * 100, 2))
+                if isinstance(prediction, float):
+                    # TODO add SHAP
+                    if prediction > configs['classification_cutoff']:
+                        st.sidebar.write("You are a cat.")
+                        st.sidebar.write(f"Predicted probability of being a cat: \n"
+                                         f"{round(prediction * 100, 2)}%")
+                    else:
+                        st.sidebar.write("You are not a cat.")
+                        st.sidebar.write(f"Predicted probability of being a cat: \n"
+                                         f"{round(prediction * 100, 2)}%")
+                else:
+                    st.sidebar.write("Something went wrong.")
 
 
 if __name__ == "__main__":

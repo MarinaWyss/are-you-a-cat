@@ -1,3 +1,4 @@
+import time
 import numpy as np
 
 from zenml.steps import BaseParameters, step
@@ -62,6 +63,7 @@ def predictor(
     Returns:
         (np.ndarray) Prediction
     """
-    service.start(timeout=10)  # should be a NOP if already started
+    time.sleep(20)
+    service.start(timeout=30)  # should be a NOP if already started
     prediction = service.predict(data)[:, 0]
     return prediction

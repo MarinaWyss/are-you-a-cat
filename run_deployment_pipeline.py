@@ -6,22 +6,14 @@ from zenml.integrations.mlflow.model_deployers.mlflow_model_deployer import (
     MLFlowModelDeployer,
 )
 
-from steps.import_data import dynamic_importer, import_data
+from steps.import_data import import_data
 from steps.train_model import train_model
 from steps.evaluate_model import evaluate_model
 from steps.deploy_model import DeploymentTriggerConfig, deployment_trigger
-from steps.inference import (
-    MLFlowDeploymentLoaderStepParameters,
-    prediction_service_loader,
-    predictor
-)
-
 from pipelines.deployment_pipeline import continuous_deployment_pipeline
-from pipelines.inference_pipeline import inference_pipeline
 
 
 def run_main():
-    """Run the mlflow example pipeline"""
     with open('steps/config.yaml', 'r') as file:
         configs = yaml.safe_load(file)
 
@@ -36,22 +28,10 @@ def run_main():
             )
         ),
         model_deployer=mlflow_model_deployer_step(
-            params=MLFlowDeployerParameters()
+            params=MLFlowDeployerParameters(workers=2)
         ),
     )
     deployment.run()
-
-    inference = inference_pipeline(
-        dynamic_importer=dynamic_importer(),
-        prediction_service_loader=prediction_service_loader(
-            MLFlowDeploymentLoaderStepParameters(
-                pipeline_name="continuous_deployment_pipeline",
-                step_name="mlflow_model_deployer_step",
-            )
-        ),
-        predictor=predictor(),
-    )
-    inference.run()
 
     model_deployer = MLFlowModelDeployer.get_active_model_deployer()
 
@@ -67,8 +47,6 @@ def run_main():
             f"The MLflow prediction server is running locally as a daemon process "
             f"and accepts inference requests at:\n"
             f"    {service[0].prediction_url}\n"
-            f"To stop the service, re-run the same command and supply the "
-            f"`--stop_service` argument."
         )
 
 
