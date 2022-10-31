@@ -23,5 +23,8 @@ num_epochs: 10
 random_seed: 0
 
 classification_cutoff: 0.5
+min_unsure: 0.5
+max_unsure: 0.8
+
 min_precision: 0.3
 min_recall: 0.6

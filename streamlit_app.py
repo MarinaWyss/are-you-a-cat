@@ -1,9 +1,8 @@
 import yaml
 import numpy as np
 from PIL import Image
-from skimage.transform import resize
-import streamlit as st
 
+import streamlit as st
 from zenml.services import load_last_service_from_step
 
 from run_deployment_pipeline import run_main
@@ -20,7 +19,7 @@ def main():
 
     whole_pipeline_image = Image.open("_assets/pipeline.png")
     st.markdown(
-     """ 
+        """ 
      #### Problem Statement
      Sometimes it is hard to know if you are a cat or not. \n
      \n
@@ -31,7 +30,7 @@ def main():
     )
     st.image(whole_pipeline_image, caption="Deep learning pipeline with ZenML.")
     st.markdown(
-    """
+        """
     This is the pipeline. First, we ingest and prepare the training data. Then, \
     we train a convolutional neural network, evaluate its performance on a validation set, \
     and log the model configuration, hyperparameters, and evaluation metrics to MLFlow. \n
@@ -52,9 +51,8 @@ def main():
         u_img = Image.open(uploaded_file).convert('L')  # grayscale
         show.image(u_img, caption='This is you.', use_column_width=True)
         # TODO input validation
-        pred_image = np.asarray(u_img) / 255.
-        pred_image = resize(pred_image,
-                            (configs['image_size'], configs['image_size']))
+        resized = u_img.resize((configs['image_size'], configs['image_size']))
+        pred_image = np.asarray(resized) / 255.
         pred_image = pred_image.reshape(
             -1, configs['image_size'], configs['image_size'], 1)
 
@@ -80,14 +78,12 @@ def main():
                 st.success('Done!')
                 if isinstance(prediction, float):
                     # TODO add SHAP
-                    if prediction > configs['classification_cutoff']:
-                        st.sidebar.write("You are a cat.")
-                        st.sidebar.write(f"Predicted probability of being a cat: \n"
-                                         f"{round(prediction * 100, 2)}%")
+                    if prediction < configs['min_unsure']:
+                        st.sidebar.write("I'm pretty sure you're not a cat.")
+                    if configs['min_unsure'] <= prediction < configs['max_unsure']:
+                        st.sidebar.write("I don't think you're a cat, but it's hard to tell.")
                     else:
-                        st.sidebar.write("You are not a cat.")
-                        st.sidebar.write(f"Predicted probability of being a cat: \n"
-                                         f"{round(prediction * 100, 2)}%")
+                        st.sidebar.write("I'm pretty sure are a cat.")
                 else:
                     st.sidebar.write("Something went wrong.")
 
