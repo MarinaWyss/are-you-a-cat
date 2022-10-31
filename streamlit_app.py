@@ -82,7 +82,7 @@ def main():
                         st.sidebar.write("I'm pretty sure you're not a cat.")
                     if configs['min_unsure'] <= prediction < configs['max_unsure']:
                         st.sidebar.write("I don't think you're a cat, but it's hard to tell.")
-                    else:
+                    if prediction >= configs['max_unsure']:
                         st.sidebar.write("I'm pretty sure are a cat.")
                 else:
                     st.sidebar.write("Something went wrong.")
