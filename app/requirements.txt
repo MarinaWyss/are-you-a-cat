@@ -1,3 +1,4 @@
 zenml
 mlflow
 jinja2>=3.0.0,<3.1.2
+pyparsing>=2.4.2,<3
