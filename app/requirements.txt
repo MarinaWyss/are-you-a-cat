@@ -1,3 +1,2 @@
-streamlit==1.8.1
 markupsafe==1.1.1
 zenml==0.20.5
