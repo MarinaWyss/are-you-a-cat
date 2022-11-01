@@ -68,25 +68,23 @@ def main():
             st.sidebar.write("Upload a selfie first.")
 
         else:
-            """
-            There is a problem installing zenml with Streamlit at the moment.
-            This open PR *should* solve the problem:
-            https://github.com/zenml-io/zenml/pull/888
+            # There is a problem installing zenml with Streamlit at the moment.
+            # This open PR *should* solve the problem:
+            # https://github.com/zenml-io/zenml/pull/888
             
-            I will add this code back in (it works locally) once the PR
-            is done.
+            # I will add this code back in (it works locally) once the PR
+            # is done.
             
-            service = load_last_service_from_step(
-                pipeline_name="continuous_deployment_pipeline",
-                step_name="model_deployer",
-                running=True,
-            )
-            if service is None:
-                st.write("No service could be found. \
-                    The pipeline will be run first to create a service.")
-                run_main()
-            """
-            # hacky work-around
+            # service = load_last_service_from_step(
+            #    pipeline_name="continuous_deployment_pipeline",
+            #    step_name="model_deployer",
+            #    running=True,
+            # )
+            # if service is None:
+            #    st.write("No service could be found. \
+            #        The pipeline will be run first to create a service.")
+            #    run_main()
+
             model = tf.keras.models.load_model(f"saved_model/{configs['best_model']}")
 
             with st.spinner('Classifying...'):
