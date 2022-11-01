@@ -81,7 +81,7 @@ This pipeline is a simple first pass, and has some major limitations. Some thing
     - And I haven't even set up the logs to save after a run...
   - I have no idea how the model will perform on real data (which may differ significantly from the training set I used). I also have no way to track this/gather feedback or more labels.
   - Similarly, because I don't know what the input data look like, I cannot do any drift detection.
-  - I also don't know any performance metrics for the app. From my first tests it seems to have a latency issue...
+  - I also don't know any performance metrics for the app.
   - There is also no way for me to know about errors users get from the app. For example, I don't know what happens if someone uploads a document instead of a photo. I won't know if something breaks and the app is down. And I've done very little to make the app fail gracefully in the case of user error.
 - Orchestration:
   - Running the pipeline is currently ad-hoc and manual. In the future if I was able to store incoming images/build the training dataset in some automated way, I could schedule periodic re-training with Airflow.
