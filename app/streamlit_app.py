@@ -14,15 +14,15 @@ from run_deployment_pipeline import run_main
 
 
 def main():
-    with open('steps/config.yaml', 'r') as file:
+    with open('../steps/config.yaml', 'r') as file:
         configs = yaml.safe_load(file)
 
     st.title("Are you a cat?")
 
-    high_level_image = Image.open("_assets/cat.jpg")
+    high_level_image = Image.open("../_assets/cat.jpg")
     show = st.image(high_level_image, use_column_width=True, caption="Well, are you?")
 
-    whole_pipeline_image = Image.open("_assets/pipeline.png")
+    whole_pipeline_image = Image.open("../_assets/pipeline.png")
     st.markdown(
         """ 
      #### Problem Statement

@@ -1,0 +1,6 @@
+zenml~=0.20.5
+mlflow~=1.25.1
+pandas==1.4.4
+itsdangerous==2.0.1
+werkzeug==2.0.3
+scikit-learn
