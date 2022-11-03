@@ -103,7 +103,7 @@ def main():
 
                 # Save image to s3 for monitoring
                 time = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-                path = f"{configs['s3_bucket']}/{configs['uploads_key']}/{time}"
+                path = f"s3://{configs['s3_bucket']}/{configs['uploads_key']}/{time}"
                 u_img.save(s3.open(f"{path}.png", 'wb'), 'PNG')
 
                 if isinstance(prediction, float):
@@ -125,16 +125,17 @@ def main():
                     # Save feedback to s3
                     if st.sidebar.button("Submit feedback."):
                         df = pd.DataFrame({'feedback': feedback}, index=[0])
-                        bytes_to_write = df.to_csv(None).encode()
-                        with s3.open(f"s3://{path}.csv", 'wb') as f:
+                        bytes_to_write = df.to_csv(None, index=False).encode()
+                        with s3.open(f"{path}.csv", 'wb') as f:
                             f.write(bytes_to_write)
+                        st.sidebar.write(f"Feedback ({feedback}) saved to {path}.csv")
 
                 else:  # If something went wrong with the model
                     st.sidebar.write("Something went wrong.")
                     # TODO remove copy pasta
                     df = pd.DataFrame({'feedback': '-999'}, index=[0])
                     bytes_to_write = df.to_csv(None, index=False).encode()
-                    with s3.open(f"s3://{path}.csv", 'wb') as f:
+                    with s3.open(f"{path}.csv", 'wb') as f:
                         f.write(bytes_to_write)
 
 
