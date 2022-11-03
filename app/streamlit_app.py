@@ -5,6 +5,8 @@ import s3fs
 import datetime
 
 import numpy as np
+import pandas as pd
+
 from PIL import Image
 import tensorflow as tf
 
@@ -62,14 +64,7 @@ def main():
 
     if uploaded_file is not None:
         u_img = Image.open(uploaded_file).convert('L')  # grayscale
-
-        # Save image to s3 for monitoring
-        time = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        path = f"{configs['s3_bucket']}/{configs['uploads_key']}/{time}"
-        u_img.save(s3.open(path, 'wb'), 'PNG')
-
         show.image(u_img, caption='This is you.', use_column_width=True)
-
         # Prepare image for prediction
         # TODO input validation
         resized = u_img.resize((configs['image_size'], configs['image_size']))
@@ -107,6 +102,12 @@ def main():
                 # prediction = service.predict(pred_image)[:, 0].item()
                 prediction = model.predict(pred_image)[:, 0].item()
                 st.success('Done!')
+
+                # Save image to s3 for monitoring
+                time = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+                path = f"{configs['s3_bucket']}/{configs['uploads_key']}/{time}/"
+                u_img.save(s3.open(f"{path}.png", 'wb'), 'PNG')
+
                 if isinstance(prediction, float):
                     # TODO add SHAP
                     if prediction < configs['min_unsure']:
@@ -115,8 +116,19 @@ def main():
                         st.sidebar.write("I don't think you're a cat, but it's hard to tell.")
                     if prediction >= configs['max_unsure']:
                         st.sidebar.write("I'm pretty sure you are a cat.")
+
+                    # Gather user feedback for monitoring/future training
+                    feedback = st.radio("Am I right?", ('Yes', 'No'))
+
                 else:
                     st.sidebar.write("Something went wrong.")
+                    feedback = '-999'  # Also capture if something went wrong
+
+                    # Save feedback to s3
+                    # TODO figure out a slicker way to do this
+                    df = pd.DataFrame({'feedback': feedback}, index=[0])
+                    with s3.open(f"{path}.csv", 'wb') as f:
+                        df.to_csv(f)
 
 
 if __name__ == "__main__":
