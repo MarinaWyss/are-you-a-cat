@@ -127,7 +127,7 @@ def main():
                         df = pd.DataFrame({'feedback': feedback}, index=[0])
                         with s3.open(f"{path}.csv", 'wb') as f:
                             df.to_csv(f)
-                            st.sidebar.write(f"Feedback ({feedback}) saved to {path}.csv")
+                        st.sidebar.write(f"Feedback ({feedback}) saved to {path}.csv")
 
                 else:  # If something went wrong with the model
                     st.sidebar.write("Something went wrong.")
