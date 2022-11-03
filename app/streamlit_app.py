@@ -119,16 +119,15 @@ def main():
                     # TODO figure out a slicker way to do this
                     st.sidebar.write("Am I right?")
                     if st.sidebar.button("Yep."):
-                        feedback = '1'
+                        df = pd.DataFrame({'feedback': '1'}, index=[0])
                     if st.sidebar.button("Nope."):
-                        feedback = '0'
+                        df = pd.DataFrame({'feedback': '0'}, index=[0])
 
                 else:  # If something went wrong with the model
                     st.sidebar.write("Something went wrong.")
-                    feedback = '-999'
+                    df = pd.DataFrame({'feedback': '-999'}, index=[0])
 
                 # Save feedback to s3
-                df = pd.DataFrame({'feedback': feedback}, index=[0])
                 with s3.open(f"{path}.csv", 'wb') as f:
                     df.to_csv(f)
 
