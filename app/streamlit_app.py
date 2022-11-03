@@ -1,6 +1,7 @@
 import os
 import sys
 import yaml
+import s3fs
 import numpy as np
 from PIL import Image
 import tensorflow as tf
@@ -17,8 +18,11 @@ sys.path.append(parent)
 
 
 def main():
+    # Set up
     with open('steps/config.yaml', 'r') as file:
         configs = yaml.safe_load(file)
+    s3 = s3fs.S3FileSystem(anon=False)
+    path = f"{configs['s3_bucket']}/{configs['uploads_key']}"
 
     st.title("Are you a cat?")
 
@@ -57,7 +61,13 @@ def main():
 
     if uploaded_file is not None:
         u_img = Image.open(uploaded_file).convert('L')  # grayscale
+
+        # Save image to s3 for monitoring
+        u_img.save(s3.open(path, 'wb'), 'PNG')
+
         show.image(u_img, caption='This is you.', use_column_width=True)
+
+        # Prepare image for prediction
         # TODO input validation
         resized = u_img.resize((configs['image_size'], configs['image_size']))
         pred_image = np.asarray(resized) / 255.

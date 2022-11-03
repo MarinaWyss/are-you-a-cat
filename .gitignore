@@ -7,3 +7,4 @@ data/train/
 *__pycache__*
 mlruns/
 hyperband_tuner*/
+.streamlit/secrets.toml

@@ -61,7 +61,7 @@ This project primarily uses a Streamlit application for inference, but it contai
 
 ##### Streamlit Application
 
-For inference, I have a simple [Streamlit application](https://marinawyss-are-you-a-cat-appstreamlit-app-zbvy1b.streamlitapp.com/) that consumes the latest model service asynchronously from the pipeline logic.
+For inference, I have a simple [Streamlit application](https://marinawyss-are-you-a-cat-appstreamlit-app-ccycwd.streamlit.app/) that consumes the latest model service asynchronously from the pipeline logic.
 
 The Streamlit app takes in a photo (selfie), and returns the probability that you are a cat. In the future I will add a SHAP explanation of why the prediction was made for this particular photo.
 
