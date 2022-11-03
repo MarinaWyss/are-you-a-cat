@@ -1,4 +1,2 @@
-Pillow
-PyYAML
-numpy
-tensorflow
+zenml~=0.20.5
+pandas==1.4.4
