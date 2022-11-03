@@ -122,7 +122,7 @@ def main():
                         horizontal=True
                     )
                     # Save feedback to s3
-                    if st.sidebar.button("Submit feedback.")
+                    if st.sidebar.button("Submit feedback."):
                         # TODO figure out a slicker way to do this
                         df = pd.DataFrame({'feedback': feedback}, index=[0])
                         with s3.open(f"{path}.csv", 'wb') as f:
