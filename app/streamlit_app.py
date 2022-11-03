@@ -125,15 +125,16 @@ def main():
                     # Save feedback to s3
                     if st.sidebar.button("Submit feedback."):
                         df = pd.DataFrame({'feedback': feedback}, index=[0])
+                        bytes_to_write = df.to_csv(None).encode()
                         with s3.open(f"{path}.csv", 'wb') as f:
-                            df.to_csv(f)
-                        st.sidebar.write(f"Feedback ({feedback}) saved to {path}.csv")
+                            f.write(bytes_to_write)
 
                 else:  # If something went wrong with the model
                     st.sidebar.write("Something went wrong.")
                     df = pd.DataFrame({'feedback': '-999'}, index=[0])
+                    bytes_to_write = df.to_csv(None).encode()
                     with s3.open(f"{path}.csv", 'wb') as f:
-                        df.to_csv(f)
+                        f.write(bytes_to_write)
 
 
 if __name__ == "__main__":
