@@ -116,17 +116,17 @@ def main():
                         st.sidebar.write("I'm pretty sure you are a cat.")
 
                     # Gather user feedback for monitoring/future training
-                    feedback = st.radio("Am I right?", ('Yes', 'No'))
+                    feedback = st.sidebar.radio("Am I right?", ('Yes', 'No'))
 
                 else:
                     st.sidebar.write("Something went wrong.")
                     feedback = '-999'  # Also capture if something went wrong
 
-                    # Save feedback to s3
-                    # TODO figure out a slicker way to do this
-                    df = pd.DataFrame({'feedback': feedback}, index=[0])
-                    with s3.open(f"{path}.csv", 'wb') as f:
-                        df.to_csv(f)
+                # Save feedback to s3
+                # TODO figure out a slicker way to do this
+                df = pd.DataFrame({'feedback': feedback}, index=[0])
+                with s3.open(f"{path}.csv", 'wb') as f:
+                    df.to_csv(f)
 
 
 if __name__ == "__main__":
