@@ -3,14 +3,17 @@ import sys
 import yaml
 import numpy as np
 from PIL import Image
-#import tensorflow as tf
+import tensorflow as tf
 
 import streamlit as st
-from zenml.services import load_last_service_from_step
+
+# from zenml.services import load_last_service_from_step
 
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
-from run_deployment_pipeline import run_main
+
+
+# from run_deployment_pipeline import run_main
 
 
 def main():
@@ -71,24 +74,25 @@ def main():
             # There is a problem installing zenml with Streamlit at the moment.
             # This open PR *should* solve the problem:
             # https://github.com/zenml-io/zenml/pull/888
-            
+
             # I will add this code back in (it works locally) once the PR
             # is done.
-            
-            service = load_last_service_from_step(
-                pipeline_name="continuous_deployment_pipeline",
-                step_name="model_deployer",
-                running=True,
-            )
-            if service is None:
-                st.write("No service could be found. \
-                    The pipeline will be run first to create a service.")
-                run_main()
+
+            # service = load_last_service_from_step(
+            #    pipeline_name="continuous_deployment_pipeline",
+            #    step_name="model_deployer",
+            #    running=True,
+            # )
+            # if service is None:
+            #    st.write("No service could be found. \
+            #        The pipeline will be run first to create a service.")
+            #    run_main()
+
+            model = tf.keras.models.load_model(f"saved_model/{configs['best_model']}")
 
             with st.spinner('Classifying...'):
-                prediction = service.predict(pred_image)[:, 0].item()
-                # model = tf.keras.models.load_model(f"saved_model/{configs['best_model']}")
-                # prediction = model.predict(pred_image)[:, 0].item()
+                # prediction = service.predict(pred_image)[:, 0].item()
+                prediction = model.predict(pred_image)[:, 0].item()
                 st.success('Done!')
                 if isinstance(prediction, float):
                     # TODO add SHAP
