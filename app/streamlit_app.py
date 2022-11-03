@@ -117,18 +117,22 @@ def main():
 
                     # Gather user feedback for monitoring/future training
                     # TODO figure out a slicker way to do this
-                    st.sidebar.write("Am I right?")
-                    if st.sidebar.button("Yep."):
+                    feedback = st.sidebar.radio(
+                        "Am I right?",
+                        ('Yes', 'No'),
+                        horizontal=True
+                    )
+                    # Save feedback to s3
+                    if st.sidebar.button("Submit feedback."):
+                        df = pd.DataFrame({'feedback': feedback}, index=[0])
                         with s3.open(f"{path}.csv", 'wb') as f:
-                            pd.DataFrame({'feedback': '1'}, index=[0]).to_csv(f)
-                    if st.sidebar.button("Nope."):
-                        with s3.open(f"{path}.csv", 'wb') as f:
-                            pd.DataFrame({'feedback': '0'}, index=[0]).to_csv(f)
+                            df.to_csv(f)
 
                 else:  # If something went wrong with the model
                     st.sidebar.write("Something went wrong.")
+                    df = pd.DataFrame({'feedback': '-999'}, index=[0])
                     with s3.open(f"{path}.csv", 'wb') as f:
-                        pd.DataFrame({'feedback': '-999'}, index=[0]).to_csv(f)
+                        df.to_csv(f)
 
 
 if __name__ == "__main__":
