@@ -5,6 +5,5 @@ data/test/
 data/train/
 *.pyc
 *__pycache__*
-.zen/
 mlruns/
 hyperband_tuner*/
