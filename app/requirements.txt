@@ -1,9 +1,10 @@
 zenml~=0.20.5
 mlflow~=1.25.1
 pandas==1.4.4
+pyparsing==2.4.7
 itsdangerous==2.0.1
 werkzeug==2.0.3
 scikit-learn
 jinja2<3.1.0
 tensorflow
-pyparsing==2.4.7
+httplib2==0.19.0
