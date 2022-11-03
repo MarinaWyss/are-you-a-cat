@@ -6,3 +6,4 @@ werkzeug==2.0.3
 scikit-learn
 jinja2<3.1.0
 tensorflow
+pyparsing==2.4.7
