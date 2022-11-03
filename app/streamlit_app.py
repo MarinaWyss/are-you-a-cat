@@ -16,8 +16,6 @@ import streamlit as st
 
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
-
-
 # from run_deployment_pipeline import run_main
 
 
@@ -105,7 +103,7 @@ def main():
 
                 # Save image to s3 for monitoring
                 time = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-                path = f"{configs['s3_bucket']}/{configs['uploads_key']}/{time}/"
+                path = f"{configs['s3_bucket']}/{configs['uploads_key']}/{time}"
                 u_img.save(s3.open(f"{path}.png", 'wb'), 'PNG')
 
                 if isinstance(prediction, float):
