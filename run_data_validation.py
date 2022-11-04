@@ -7,7 +7,7 @@ def main():
         root='data', object_type='VisionData', image_extension='jpg')
     suite = train_test_validation()
     result = suite.run(train_ds, test_ds)
-    result.save_as_html('data_validation.html')
+    result.save_as_html('data/data_validation.html')
 
 
 if __name__ == '__main__':

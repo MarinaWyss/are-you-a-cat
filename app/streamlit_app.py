@@ -122,9 +122,9 @@ def main():
                         ('Yes', 'No'),
                         horizontal=True
                     )
+                    df = pd.DataFrame({'feedback': feedback}, index=[0])
                     # Save feedback to s3
                     if st.sidebar.button("Submit feedback."):
-                        df = pd.DataFrame({'feedback': feedback}, index=[0])
                         bytes_to_write = df.to_csv(None, index=False).encode()
                         with s3.open(f"{path}.csv", 'wb') as f:
                             f.write(bytes_to_write)
