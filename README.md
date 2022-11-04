@@ -81,7 +81,8 @@ This pipeline is a simple first pass, and has some major limitations. Some thing
 - Data:
   - I didn't check the accuracy of the labels. I have so far assumed that all the images in the "cats" dataset I downloaded are \
     actually cats, for example.
-  - Data validation is not yet incorporated into the training or deployment pipelines.
+  - I also didn't confirm that there are no duplicates in the train data and test data (I just split naively and assumed).
+  - Data validation is not yet incorporated into the training or deployment pipelines, but rather is run ad-hoc separately.
 - Model/Training:
   - Currently, I'm training locally on a small dataset. In the future, training should be done in the cloud (i.e. Sagemaker) with more data/maybe for longer.
   - Hyperparameter tuning is ad-hoc and manual. ZenML is planning hyperparameter tuning support in the future, so I'll add that once it's available.
