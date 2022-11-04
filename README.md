@@ -94,6 +94,7 @@ This pipeline is a simple first pass, and has some major limitations. Some thing
   - I have very little set up besides basic logs.
   - So far I have set up the Streamlit app to save user photos and feedback, which could be used in the future to evaluate model performance on real-world data, catch drift, etc.
     - However, I have no input data validation set up, people could give inaccurate feedback, and I haven't done any rigorous testing on the app UI.
+    - I'm also not sure if there are privacy concerns with my current approach...
   - I have no way to know about user errors in the app, or performance metrics (e.g. latency).
 - Orchestration:
   - Running the pipeline is currently ad-hoc and manual. In the future I would like to re-train with some of the new, user-generated images on a regular basis with Airflow.
