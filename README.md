@@ -84,7 +84,7 @@ This pipeline is a simple first pass, and has some major limitations. Some thing
   - I also didn't confirm that there are no duplicates in the train data and test data (I just split naively and assumed).
   - Data validation is not yet incorporated into the training or deployment pipelines, but rather is run ad-hoc separately.
 - Model/Training:
-  - Currently, I'm training locally on a small dataset. In the future, training should be done in the cloud (i.e. Sagemaker) with more data/maybe for longer.
+  - Currently, I'm training locally on a small dataset. In the future, training should be done in the cloud (i.e. Sagemaker) with more data/maybe for longer. I have this mostly set up, but just haven't completed it yet.
   - Hyperparameter tuning is ad-hoc and manual. ZenML is planning hyperparameter tuning support in the future, so I'll add that once it's available.
   - I haven't done any in-depth model performance work yet (e.g. no error analysis or real experimentation). I haven't even tuned the classification cut-off.
   - Model training is slow. This may be because I'm using an old laptop at the moment, but there may be ways to improve the efficiency of model training.
