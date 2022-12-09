@@ -74,12 +74,13 @@ def main():
         if uploaded_file is None:
             st.sidebar.write("Upload a selfie first.")
         else:
-            service = load_last_service_from_step(
-                pipeline_name="continuous_deployment_pipeline",
-                step_name="model_deployer",
-                running=True,
-            )
-            if service is None:
+            try:
+                service = load_last_service_from_step(
+                    pipeline_name="continuous_deployment_pipeline",
+                    step_name="model_deployer",
+                    running=True,
+                )
+            except KeyError:
                 st.write("No service could be found. The pipeline will be run first to create a service.")
                 run_main()
 
