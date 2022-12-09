@@ -8,14 +8,15 @@ import numpy as np
 import pandas as pd
 
 from PIL import Image
+import tensorflow as tf
 
 import streamlit as st
 
-from zenml.services import load_last_service_from_step
+# from zenml.services import load_last_service_from_step
 
 parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
-from run_deployment_pipeline import run_main
+# from run_deployment_pipeline import run_main
 
 
 def main():
@@ -74,18 +75,27 @@ def main():
         if uploaded_file is None:
             st.sidebar.write("Upload a selfie first.")
         else:
-            try:
-                service = load_last_service_from_step(
-                    pipeline_name="continuous_deployment_pipeline",
-                    step_name="model_deployer",
-                    running=True,
-                )
-            except KeyError:
-                st.write("No service could be found. The pipeline will be run first to create a service.")
-                run_main()
+            model = tf.keras.models.load_model(f"saved_model/{configs['best_model']}")
+            # There is a problem installing zenml with Streamlit at the moment.
+            # This open PR *should* solve the problem:
+            # https://github.com/zenml-io/zenml/pull/888
+
+            # I will add this code back in (it works locally) once the PR
+            # is done.
+
+            # try:
+            #     service = load_last_service_from_step(
+            #         pipeline_name="continuous_deployment_pipeline",
+            #         step_name="model_deployer",
+            #         running=True,
+            #     )
+            # except KeyError:
+            #     st.sidebard.write("No service could be found. The pipeline will run first to create a new service.")
+            #     run_main()
 
             with st.spinner('Classifying...'):
-                prediction = service.predict(pred_image)[:, 0].item()
+                # prediction = service.predict(pred_image)[:, 0].item()
+                prediction = model.predict(pred_image)[:, 0].item()
                 st.success('Done!')
 
                 # Save image to s3 for monitoring
