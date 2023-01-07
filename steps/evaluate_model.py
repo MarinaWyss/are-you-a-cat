@@ -12,7 +12,8 @@ from model.evaluator import Evaluation
 logging.basicConfig(level=logging.DEBUG)
 
 
-@step(experiment_tracker="mlflow_tracker")
+#@step(experiment_tracker="mlflow_tracker")
+@step()
 def evaluate_model(trained_model: tf.keras.Model,
                    X_test: np.ndarray,
                    y_test: np.ndarray) -> Output(
@@ -48,13 +49,13 @@ def evaluate_model(trained_model: tf.keras.Model,
 
         logging.info(f"Calculating metrics with cut-off {configs['classification_cutoff']}...")
         precision = evaluation.precision(y_test, prediction)
-        mlflow.log_metric("test_precision", precision)
+        #mlflow.log_metric("test_precision", precision)
 
         recall = evaluation.recall(y_test, prediction)
-        mlflow.log_metric("test_recall", recall)
+        #mlflow.log_metric("test_recall", recall)
 
         f1 = evaluation.f1(y_test, prediction)
-        mlflow.log_metric("test_f1", f1)
+        #mlflow.log_metric("test_f1", f1)
 
         logging.info("Model evaluation done.")
         return precision, recall, f1

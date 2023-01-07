@@ -31,5 +31,5 @@ min_recall: 0.6
 
 best_model: 'model-2022-10-30-12-53-05.h5'
 
-s3_bucket: 'are-you-a-cat'
+s3_bucket: 'are-you-a-cat-zenml'
 uploads_key: 'streamlit_uploads'
