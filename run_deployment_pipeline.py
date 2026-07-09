@@ -1,11 +1,10 @@
-import yaml
-
 from zenml.integrations.mlflow.steps import MLFlowDeployerParameters
 from zenml.integrations.mlflow.steps import mlflow_model_deployer_step
 from zenml.integrations.mlflow.model_deployers.mlflow_model_deployer import (
     MLFlowModelDeployer,
 )
 
+from steps.config_loader import load_config
 from steps.import_data import import_data
 from steps.train_model import train_model
 from steps.evaluate_model import evaluate_model
@@ -14,8 +13,7 @@ from pipelines.deployment_pipeline import continuous_deployment_pipeline
 
 
 def run_main():
-    with open('steps/config.yaml', 'r') as file:
-        configs = yaml.safe_load(file)
+    configs = load_config()
 
     deployment = continuous_deployment_pipeline(
         import_data=import_data(),
