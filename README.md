@@ -74,6 +74,36 @@ As a next step, I'd like to add a SHAP explanation of why the prediction was mad
 Note that there are currently dependency resolution issues using the latest version of ZenML with \
 Streamlit (see [this open PR](https://github.com/zenml-io/zenml/pull/888)), so the app is temporarily using the model from the training pipeline.
 
+### Development
+
+Common tasks are wrapped in a `Makefile`:
+
+```bash
+make install    # install dependencies
+make lint       # run flake8
+make test       # run the test suite
+make train      # run the training pipeline
+make app        # launch the Streamlit app
+```
+
+Run `make help` to see every target.
+
+#### Project layout
+
+| Path | Responsibility |
+| --- | --- |
+| `steps/config_loader.py` | Single, cached, validated entry point for loading `config.yaml`. |
+| `steps/logging_config.py` | Project-wide logging setup. |
+| `steps/seed.py` | Reproducible seeding of Python, NumPy, and TensorFlow. |
+| `steps/preprocessing.py` | Image preprocessing shared by training and serving. |
+| `model/architecture.py` | The single definition of the CNN, used by training *and* tuning. |
+| `model/predictor.py` | Turns a raw probability into a human-readable verdict. |
+| `model/evaluator.py` | sklearn-backed precision/recall/F1. |
+
+Configuration lives in `steps/config.yaml` and is loaded exclusively through
+`steps.config_loader.load_config`, so a bad or missing config fails loudly at
+load time rather than deep inside training.
+
 ### Limitations
 
 This pipeline is a simple first pass, and has some major limitations. Some things I plan to incorporate in the future include:
@@ -94,7 +124,7 @@ This pipeline is a simple first pass, and has some major limitations. Some thing
 - Monitoring:
   - I have very little set up besides basic logs.
   - So far I have set up the Streamlit app to save user photos and feedback, which could be used in the future to evaluate model performance on real-world data, catch drift, etc.
-    - However, I have no input data validation set up, people could give inaccurate feedback, and I haven't done any rigorous testing on the app UI.
+    - The app now validates uploads (size and decodability), but people could still give inaccurate feedback, and I haven't done any rigorous testing on the app UI.
     - I'm also not sure if there are privacy concerns with my current approach...
   - I have no way to know about user errors in the app, or performance metrics (e.g. latency).
 - Orchestration:
@@ -102,4 +132,4 @@ This pipeline is a simple first pass, and has some major limitations. Some thing
     - It would be even cooler if I could do some kind of continual learning approach so that I don't need to store the images at all...
 - Misc:
   - Dockerizing might make sense.
-  - There are likely opportunities for better testing, since currently the tests I have are quite minimal.
+  - Test coverage has been expanded (config loading, evaluation metrics, preprocessing, prediction interpretation, and the model architecture), but there is still room for integration-level tests of the full pipeline.

@@ -7,6 +7,16 @@ from zenml.integrations.mlflow.model_deployers.mlflow_model_deployer import (
 )
 from zenml.integrations.mlflow.services import MLFlowDeploymentService
 
+from steps.logging_config import get_logger
+
+logger = get_logger(__name__)
+
+# Give the deployment service a moment to come up before we hit it, and cap how
+# long a single ``start`` may block. Named constants beat the bare magic numbers
+# that used to sit inline in ``predictor``.
+SERVICE_WARMUP_SECONDS = 20
+SERVICE_START_TIMEOUT_SECONDS = 30
+
 
 class MLFlowDeploymentLoaderStepParameters(BaseParameters):
     """MLflow deployment getter parameters
@@ -63,7 +73,8 @@ def predictor(
     Returns:
         (np.ndarray) Prediction
     """
-    time.sleep(20)
-    service.start(timeout=30)  # should be a NOP if already started
+    logger.info("Waiting for the prediction service to warm up...")
+    time.sleep(SERVICE_WARMUP_SECONDS)
+    service.start(timeout=SERVICE_START_TIMEOUT_SECONDS)  # NOP if already started
     prediction = service.predict(data)[:, 0]
     return prediction

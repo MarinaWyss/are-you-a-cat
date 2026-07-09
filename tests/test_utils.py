@@ -25,6 +25,11 @@ class TestUtils(unittest.TestCase):
         self.assertIsInstance(res, np.ndarray)
         np.testing.assert_array_equal(res, np.array([0, 1]))
 
+    def test_is_image_path(self):
+        self.assertTrue(utils._is_image_path('data/train/cats/cat.1.jpg'))
+        self.assertFalse(utils._is_image_path('data/train/cats/.DS_Store'))
+        self.assertFalse(utils._is_image_path('data/train/feedback.csv'))
+
     def test_load_data(self):
         res = utils.load_data(train=True, configs=self.configs)
         # There are two train subdirectories, and we grab 10

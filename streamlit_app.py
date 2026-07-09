@@ -1,16 +1,19 @@
 import os
 import sys
-import yaml
-import s3fs
 import datetime
 
+import s3fs
 import numpy as np
 import pandas as pd
 
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 import tensorflow as tf
 
 import streamlit as st
+
+from steps.config_loader import load_config
+from steps.preprocessing import image_to_model_input
+from model.predictor import interpret_prediction
 
 # from zenml.services import load_last_service_from_step
 
@@ -18,11 +21,41 @@ parent = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 sys.path.append(parent)
 # from run_deployment_pipeline import run_main
 
+# Largest upload we are willing to open, in bytes. Guards against someone
+# uploading an enormous file and exhausting memory.
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10 MB
+
+
+def validate_upload(uploaded_file) -> Image.Image:
+    """Validates an uploaded file and returns it as a PIL image.
+
+    This addresses the ``# TODO input validation`` in the original app: we now
+    reject oversized files and anything that is not a decodable image instead
+    of letting a malformed upload crash the prediction path.
+
+    Args:
+        uploaded_file: A Streamlit ``UploadedFile``.
+
+    Returns:
+        (PIL.Image.Image): The decoded image.
+
+    Raises:
+        ValueError: If the file is too large or is not a valid image.
+    """
+    if uploaded_file.size > MAX_UPLOAD_BYTES:
+        raise ValueError(
+            f"File is too large ({uploaded_file.size} bytes). "
+            f"The limit is {MAX_UPLOAD_BYTES} bytes."
+        )
+    try:
+        return Image.open(uploaded_file)
+    except UnidentifiedImageError as exc:
+        raise ValueError("That file does not look like a valid image.") from exc
+
 
 def main():
     # Set up
-    with open('steps/config.yaml', 'r') as file:
-        configs = yaml.safe_load(file)
+    configs = load_config()
     s3 = s3fs.S3FileSystem(anon=False)
 
     st.title("Are you a cat?")
@@ -32,7 +65,7 @@ def main():
 
     whole_pipeline_image = Image.open("_assets/pipeline.png")
     st.markdown(
-        """ 
+        """
      #### Problem Statement
      Sometimes it is hard to know if you are a cat or not. \n
      \n
@@ -60,20 +93,23 @@ def main():
     st.set_option('deprecation.showfileUploaderEncoding', False)
     uploaded_file = st.sidebar.file_uploader(" ", type=['png', 'jpg', 'jpeg'])
 
+    pred_image = None
     if uploaded_file is not None:
-        u_img = Image.open(uploaded_file).convert('L')  # grayscale
-        show.image(u_img, caption='This is you.', use_column_width=True)
-        # Prepare image for prediction
-        # TODO input validation
-        resized = u_img.resize((configs['image_size'], configs['image_size']))
-        pred_image = np.asarray(resized) / 255.
-        pred_image = pred_image.reshape(
-            -1, configs['image_size'], configs['image_size'], 1)
+        try:
+            image = validate_upload(uploaded_file)
+        except ValueError as err:
+            st.sidebar.error(str(err))
+        else:
+            u_img = image.convert('L')  # grayscale
+            show.image(u_img, caption='This is you.', use_column_width=True)
+            # Prepare image for prediction using the same preprocessing the
+            # training pipeline uses.
+            pred_image = image_to_model_input(image, configs['image_size'])
 
     st.sidebar.write('\n')
     if st.sidebar.button("Predict"):
-        if uploaded_file is None:
-            st.sidebar.write("Upload a selfie first.")
+        if pred_image is None:
+            st.sidebar.write("Upload a valid selfie first.")
         else:
             model = tf.keras.models.load_model(f"saved_model/{configs['best_model']}")
             # There is a problem installing zenml with Streamlit at the moment.
@@ -94,45 +130,55 @@ def main():
             #     run_main()
 
             with st.spinner('Classifying...'):
-                # prediction = service.predict(pred_image)[:, 0].item()
                 prediction = model.predict(pred_image)[:, 0].item()
                 st.success('Done!')
 
                 # Save image to s3 for monitoring
                 time = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
                 path = f"s3://{configs['s3_bucket']}/{configs['uploads_key']}/{time}"
-                u_img.save(s3.open(f"{path}.png", 'wb'), 'PNG')
+                Image.open(uploaded_file).convert('L').save(
+                    s3.open(f"{path}.png", 'wb'), 'PNG')
 
                 if isinstance(prediction, float):
                     # TODO add SHAP
-                    if prediction < configs['min_unsure']:
-                        st.sidebar.write("I'm pretty sure you're not a cat.")
-                    if configs['min_unsure'] <= prediction < configs['max_unsure']:
-                        st.sidebar.write("I don't think you're a cat, but it's hard to tell.")
-                    if prediction >= configs['max_unsure']:
-                        st.sidebar.write("I'm pretty sure you are a cat.")
-
-                    # Gather user feedback for monitoring/future training
-                    # TODO figure out a slicker way to do this
-                    st.sidebar.write("Am I right?")
-                    if 'result' not in st.session_state:
-                        st.session_state.result = None
-                    if st.sidebar.button("Yep."):
-                        st.session_state.result = '1'
-                    elif st.sidebar.button("Nope."):
-                        st.session_state.result = '0'
-                    df = pd.DataFrame({'feedback': st.session_state.result}, index=[0])
-                    bytes_to_write = df.to_csv(None, index=False).encode()
-                    with s3.open(f"{path}.csv", 'wb') as f:
-                        f.write(bytes_to_write)
-
+                    verdict = interpret_prediction(prediction, configs)
+                    st.sidebar.write(verdict.message)
+                    feedback = _collect_feedback()
                 else:  # If something went wrong with the model
                     st.sidebar.write("Something went wrong.")
-                    # TODO remove copy pasta
-                    df = pd.DataFrame({'feedback': '-999'}, index=[0])
-                    bytes_to_write = df.to_csv(None, index=False).encode()
-                    with s3.open(f"{path}.csv", 'wb') as f:
-                        f.write(bytes_to_write)
+                    feedback = '-999'
+
+                _write_feedback(s3, path, feedback)
+
+
+def _collect_feedback() -> str:
+    """Renders the feedback widget and returns the user's response.
+
+    Returns:
+        (str): '1' for cat, '0' for not-cat, or None if not yet answered.
+    """
+    st.sidebar.write("Am I right?")
+    if 'result' not in st.session_state:
+        st.session_state.result = None
+    if st.sidebar.button("Yep."):
+        st.session_state.result = '1'
+    elif st.sidebar.button("Nope."):
+        st.session_state.result = '0'
+    return st.session_state.result
+
+
+def _write_feedback(s3, path: str, feedback: str) -> None:
+    """Persists a feedback row to S3 for monitoring/future training.
+
+    Args:
+        s3 (s3fs.S3FileSystem): Connected filesystem.
+        path (str): Base S3 path (without extension) for this prediction.
+        feedback (str): Feedback value to store.
+    """
+    df = pd.DataFrame({'feedback': feedback}, index=[0])
+    bytes_to_write = df.to_csv(None, index=False).encode()
+    with s3.open(f"{path}.csv", 'wb') as f:
+        f.write(bytes_to_write)
 
 
 if __name__ == "__main__":

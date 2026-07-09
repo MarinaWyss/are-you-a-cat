@@ -11,3 +11,9 @@ torchvision
 deepchecks
 s3fs
 datetime
+# Used by the Streamlit demo app (streamlit_app.py).
+streamlit
+# Used by model/hyperparameter_tuning.py; previously imported but unpinned.
+keras-tuner
+# Dev tooling for `make lint`.
+flake8

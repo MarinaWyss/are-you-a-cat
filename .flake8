@@ -1,0 +1,17 @@
+[flake8]
+max-line-length = 100
+# Keep the ignore list small and intentional:
+#   E203 - whitespace before ':' (conflicts with black's slicing style)
+#   W503 - line break before binary operator (superseded by W504)
+extend-ignore = E203, W503
+exclude =
+    .git,
+    __pycache__,
+    venv,
+    mlruns,
+    saved_model,
+    model_test.h5,
+    hyperband_tuner*
+per-file-ignores =
+    # Test modules touch private helpers on purpose.
+    tests/*: E501

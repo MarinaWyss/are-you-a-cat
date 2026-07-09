@@ -1,12 +1,12 @@
-import yaml
-import logging
 import numpy as np
 
 from zenml.steps import step, Output
 
+from steps.config_loader import load_config
+from steps.logging_config import get_logger
 from steps.utils import load_data, format_data_for_model
 
-logging.basicConfig(level=logging.DEBUG)
+logger = get_logger(__name__)
 
 
 @step
@@ -17,9 +17,9 @@ def import_data() -> Output(
     y_test=np.ndarray,
 ):
     """Loads the data and formats it for the model."""
-    with open('steps/config.yaml', 'r') as file:
-        configs = yaml.safe_load(file)
+    configs = load_config()
 
+    logger.info("Importing train and test data...")
     train_data = load_data(train=True, configs=configs)
     test_data = load_data(train=False, configs=configs)
 
@@ -32,14 +32,16 @@ def import_data() -> Output(
         dat_list=test_data, configs=configs
     )
 
+    logger.info(
+        f"Imported {len(X_train)} train and {len(X_test)} test images."
+    )
     return X_train, y_train, X_test, y_test
 
 
 @step()
 def dynamic_importer() -> Output(data=np.ndarray):
     """Downloads the latest data from a mock API."""
-    with open('steps/config.yaml', 'r') as file:
-        configs = yaml.safe_load(file)
+    configs = load_config()
     test_data = load_data(train=False, configs=configs)
     X_test, y_test, test_paths = format_data_for_model(
         dat_list=test_data, configs=configs

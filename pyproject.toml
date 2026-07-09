@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "are-you-a-cat"
+version = "0.2.0"
+description = "A ZenML + TensorFlow deep learning pipeline that classifies whether an uploaded selfie is a cat."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "Marina Wyss" }]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "--import-mode=append -ra"
+testpaths = ["tests"]
+
+[tool.isort]
+profile = "black"
+line_length = 88
+known_first_party = ["steps", "model", "pipelines"]
